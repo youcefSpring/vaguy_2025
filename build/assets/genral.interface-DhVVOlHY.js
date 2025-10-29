@@ -1,1 +1,0 @@
-import{z as e}from"./index-dIKOytT1.js";const g=i=>{let s=[];return i.includes("png")&&s.push("image/png"),i.includes("jpeg")&&s.push("image/jpeg"),i.includes("svg")&&s.push("image/svg+xml"),i.includes("svg")&&s.push("appliaction/pdf"),i.includes("*")&&(s=["*/*"]),s},u=i=>e.union([e.any(),e.string().min(2,{message:"this field is required"})]);export{g as A,u as f};
