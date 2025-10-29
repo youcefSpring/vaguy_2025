@@ -45,7 +45,7 @@ class GoogleAuthController extends Controller
 
                 // Get the localized dashboard URL
                 $dashboardUrl = LaravelLocalization::getLocalizedURL($locale, '/' . ($authType === 'influencer' ? 'influencer' : 'client') . '/dashboard');
-                return redirect($dashboardUrl)->withNotify($notify);
+                return redirect()->to($dashboardUrl)->withNotify($notify);
             }
 
             // Create new user
@@ -77,7 +77,7 @@ class GoogleAuthController extends Controller
 
             // Redirect to dashboard or profile completion
             $dashboardUrl = LaravelLocalization::getLocalizedURL($locale, '/' . ($authType === 'influencer' ? 'influencer' : 'client') . '/dashboard');
-            return redirect($dashboardUrl)->withNotify($notify);
+            return redirect()->to($dashboardUrl)->withNotify($notify);
 
         } catch (\Exception $e) {
             $notify[] = ['error', __('auth.google_auth_failed') . ': ' . $e->getMessage()];
@@ -85,7 +85,7 @@ class GoogleAuthController extends Controller
             // Get the localized login URL
             $locale = session('auth_locale', config('app.locale'));
             $loginUrl = LaravelLocalization::getLocalizedURL($locale, '/client/login');
-            return redirect($loginUrl)->withNotify($notify);
+            return redirect()->to($loginUrl)->withNotify($notify);
         }
     }
 
