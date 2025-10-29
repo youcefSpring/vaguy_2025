@@ -1,0 +1,19 @@
+{
+    "لوحة التحكم": "Dashboard",
+    "tableau de bord": "Dashboard",
+    "الرصيد الحالي": "Current Balance",
+    "مبلغ الإيداع الاجمالي": "Total Deposit Amount",
+    "إجمالي الصفقات": "Total Transactions",
+    "إجمالي الطلبات": "Total Orders",
+    "الطلبات المنجزة": "Completed Orders",
+    "الطلبات غير المكتملة": "Incomplete Orders",
+    "أحدث المعاملات": "Recent Transactions",
+    "current_balance": "Current Balance",
+    "total_deposit": "Total Deposit",
+    "total_transactions": "Total Transactions",
+    "total_orders": "Total Orders",
+    "completed_orders": "Completed Orders",
+    "incomplete_orders": "Incomplete Orders",
+    "recent_transactions": "Recent Transactions",
+    "dashboard": "Dashboard"
+}

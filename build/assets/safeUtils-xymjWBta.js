@@ -1,0 +1,1 @@
+const n=(r,s=[])=>Array.isArray(r)?r:s,e=(r,s=0)=>{const t=Number(r);return isNaN(t)?s:t},c=(r,s="")=>r==null?s:String(r),a=(r,s)=>{try{return r?JSON.parse(r)??s:s}catch{return s}},i=(r,s)=>{try{if(!r)return s;const t=new Date(r);return isNaN(t.getTime())?s:t}catch{return s}};export{e as a,a as b,c,i as d,n as s};

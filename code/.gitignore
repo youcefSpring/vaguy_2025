@@ -1,0 +1,23 @@
+# Exclude everything by default
+/*
+
+# Include only specific directories and their contents
+!/app/
+!/config/
+!/routes/
+!/resources/
+!/public/build/
+
+# Keep this file
+!.gitignore
+
+# Exclude sensitive files even in allowed directories
+.env
+.env.*
+!.env.example
+
+# Common excludes that should never be committed
+*.log
+*.key
+.DS_Store
+Thumbs.db

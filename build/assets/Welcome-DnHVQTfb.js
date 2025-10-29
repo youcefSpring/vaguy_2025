@@ -1,0 +1,1 @@
+import{j as r}from"./app-lUInwgRy.js";import{B as e}from"./button-DzDbuX-O.js";/* empty css            */import"./utils-Cx_fVcGQ.js";const i=()=>r.jsxs("div",{style:{background:"red"},children:["Welcome",r.jsx(e,{children:"Click me"})]});export{i as default};

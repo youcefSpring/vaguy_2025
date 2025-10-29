@@ -1,0 +1,21 @@
+code/node_modules/
+
+# Vendor directory
+code/vendor/
+
+# Public directory
+code/public/
+
+code/.env
+code/.env.backup
+code/.env.production
+
+
+# IDE directories
+code/.fleet
+code/.idea
+code/.vscode
+
+# Archives and large files
+public_files.zip
+

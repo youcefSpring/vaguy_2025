@@ -1,0 +1,11 @@
+import{c as v}from"./createLucideIcon-BKiTtyiR.js";import{$ as r,r as C}from"./app-lUInwgRy.js";import{$ as y,b as w}from"./index-DeDYDX0v.js";import{a as R,$ as M}from"./utils-Cx_fVcGQ.js";/**
+ * @license lucide-react v0.364.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const N=v("Check",[["path",{d:"M20 6 9 17l-5-5",key:"1gmf2c"}]]);/**
+ * @license lucide-react v0.364.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const _=v("ChevronDown",[["path",{d:"m6 9 6 6 6-6",key:"qrunsl"}]]);function k(e){const t=e+"CollectionProvider",[a,m]=y(t),[d,l]=a(t,{collectionRef:{current:null},itemMap:new Map}),u=s=>{const{scope:o,children:f}=s,c=r.useRef(null),n=r.useRef(new Map).current;return r.createElement(d,{scope:o,itemMap:n,collectionRef:c},f)},p=e+"CollectionSlot",b=r.forwardRef((s,o)=>{const{scope:f,children:c}=s,n=l(p,f),i=R(o,n.collectionRef);return r.createElement(M,{ref:i},c)}),$=e+"CollectionItemSlot",x="data-radix-collection-item",A=r.forwardRef((s,o)=>{const{scope:f,children:c,...n}=s,i=r.useRef(null),S=R(o,i),h=l($,f);return r.useEffect(()=>(h.itemMap.set(i,{ref:i,...n}),()=>void h.itemMap.delete(i))),r.createElement(M,{[x]:"",ref:S},c)});function E(s){const o=l(e+"CollectionConsumer",s);return r.useCallback(()=>{const c=o.collectionRef.current;if(!c)return[];const n=Array.from(c.querySelectorAll(`[${x}]`));return Array.from(o.itemMap.values()).sort((h,I)=>n.indexOf(h.ref.current)-n.indexOf(I.ref.current))},[o.collectionRef,o.itemMap])}return[{Provider:u,Slot:b,ItemSlot:A},E,m]}function D(e){const[t,a]=C.useState(void 0);return w(()=>{if(e){a({width:e.offsetWidth,height:e.offsetHeight});const m=new ResizeObserver(d=>{if(!Array.isArray(d)||!d.length)return;const l=d[0];let u,p;if("borderBoxSize"in l){const b=l.borderBoxSize,$=Array.isArray(b)?b[0]:b;u=$.inlineSize,p=$.blockSize}else u=e.offsetWidth,p=e.offsetHeight;a({width:u,height:p})});return m.observe(e,{box:"border-box"}),()=>m.unobserve(e)}else a(void 0)},[e]),t}function L(e){const t=C.useRef({value:e,previous:e});return C.useMemo(()=>(t.current.value!==e&&(t.current.previous=t.current.value,t.current.value=e),t.current.previous),[e])}export{k as $,N as C,L as a,_ as b,D as c};
