@@ -1,0 +1,10 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "echo 'Using CDN assets - no build needed'",
+        "build": "echo 'Using CDN assets - no build needed'"
+    },
+    "devDependencies": {},
+    "dependencies": {}
+}
