@@ -60,6 +60,13 @@ return [
     'no' => 'Non',
     'share' => 'Partager',
     'provided_by' => 'Fourni par',
+    'logout' => 'Déconnexion',
+
+    // Notifications
+    'notifications' => 'Notifications',
+    'notification' => 'Notification',
+    'no_notifications' => 'Aucune notification',
+    'view_all_notifications' => 'Voir toutes les notifications',
 
     // Navigation links
     'dashboard' => 'Tableau de bord',

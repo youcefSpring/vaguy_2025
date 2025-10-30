@@ -90,254 +90,301 @@
     <!-- Filter Modal -->
     <div id="filterModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog"
         aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
             <!-- Background overlay -->
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick="toggleFilterModal()"></div>
 
-            <!-- Modal panel -->
+            <!-- Modal panel - Made wider and better organized -->
             <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium text-gray-900">@lang('influencers.filter_influencers')</h3>
-                        <button type="button" class="text-gray-400 hover:text-gray-600" onclick="toggleFilterModal()">
+                class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+                <div class="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-white">@lang('influencers.filter_influencers')</h3>
+                        <button type="button" class="text-white/80 hover:text-white transition-colors" onclick="toggleFilterModal()">
                             <i data-lucide="x" class="h-6 w-6"></i>
                         </button>
                     </div>
+                </div>
 
-                    <div class="space-y-6 max-h-[60vh] overflow-y-auto pr-2">
-                        <!-- Social Media Platforms -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('Social Media Platforms')</h4>
-                            <div class="space-y-2">
-                                <div class="flex items-center">
-                                    <input id="social_instagram" type="checkbox" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded filterSocial" value="instagram">
-                                    <label for="social_instagram" class="mr-3 text-sm text-gray-700">Instagram</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input id="social_tiktok" type="checkbox" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded filterSocial" value="tiktok">
-                                    <label for="social_tiktok" class="mr-3 text-sm text-gray-700">TikTok</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input id="social_youtube" type="checkbox" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded filterSocial" value="youtube">
-                                    <label for="social_youtube" class="mr-3 text-sm text-gray-700">YouTube</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input id="social_facebook" type="checkbox" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded filterSocial" value="facebook">
-                                    <label for="social_facebook" class="mr-3 text-sm text-gray-700">Facebook</label>
+                <div class="bg-white px-6 py-6 max-h-[75vh] overflow-y-auto custom-scrollbar">
+                    <!-- Filter Sections with Better Organization -->
+
+                    <!-- Basic Filters Section -->
+                    <div class="mb-6 pb-6 border-b border-gray-200">
+                        <h3 class="text-base font-semibold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="sliders-horizontal" class="h-5 w-5 ml-2 text-purple-600"></i>
+                            @lang('Basic Filters')
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Social Media Platforms -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center">
+                                    <i data-lucide="share-2" class="h-4 w-4 ml-2 text-purple-600"></i>
+                                    @lang('Social Media')
+                                </h4>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <label class="flex items-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                        <input type="checkbox" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded filterSocial" value="instagram">
+                                        <span class="mr-2 text-sm text-gray-700">Instagram</span>
+                                    </label>
+                                    <label class="flex items-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                        <input type="checkbox" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded filterSocial" value="tiktok">
+                                        <span class="mr-2 text-sm text-gray-700">TikTok</span>
+                                    </label>
+                                    <label class="flex items-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                        <input type="checkbox" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded filterSocial" value="youtube">
+                                        <span class="mr-2 text-sm text-gray-700">YouTube</span>
+                                    </label>
+                                    <label class="flex items-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                        <input type="checkbox" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded filterSocial" value="facebook">
+                                        <span class="mr-2 text-sm text-gray-700">Facebook</span>
+                                    </label>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Followers Range -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('Followers Range')</h4>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="text-xs text-gray-600">@lang('Min')</label>
-                                    <input type="number" id="followers_min" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-purple-500 focus:border-purple-500" placeholder="0">
-                                </div>
-                                <div>
-                                    <label class="text-xs text-gray-600">@lang('Max')</label>
-                                    <input type="number" id="followers_max" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-purple-500 focus:border-purple-500" placeholder="1000000">
-                                </div>
+                            <!-- Wilaya (Location) -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center">
+                                    <i data-lucide="map-pin" class="h-4 w-4 ml-2 text-purple-600"></i>
+                                    @lang('Location')
+                                </h4>
+                                <select id="filter_wilaya" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white">
+                                    <option value="">@lang('All Locations')</option>
+                                    @if($wilayas ?? false)
+                                        @foreach($wilayas as $wilaya)
+                                            <option value="{{ $wilaya->id }}">{{ __($wilaya->name) }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
-                        </div>
 
-                        <!-- Categories Filter -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('influencers.categories')</h4>
-                            <div class="space-y-2 max-h-32 overflow-y-auto">
-                                @if($allCategory ?? false)
-                                    @foreach($allCategory as $category)
-                                        <div class="flex items-center">
-                                            <input id="cat_{{ $category->id }}" type="checkbox"
-                                                class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded filterCategory"
-                                                value="{{ $category->id }}">
-                                            <label for="cat_{{ $category->id }}"
-                                                class="mr-3 text-sm text-gray-700">{{ __($category->name) }}</label>
+                            <!-- Gender & Age -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center">
+                                    <i data-lucide="users" class="h-4 w-4 ml-2 text-purple-600"></i>
+                                    @lang('Demographics')
+                                </h4>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="text-xs font-medium text-gray-600 mb-2 block">@lang('Gender')</label>
+                                        <div class="grid grid-cols-3 gap-2">
+                                            <label class="flex items-center justify-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                                <input type="radio" name="gender" class="h-3.5 w-3.5 text-purple-600 filterGender" value="" checked>
+                                                <span class="mr-1.5 text-xs text-gray-700">@lang('All')</span>
+                                            </label>
+                                            <label class="flex items-center justify-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                                <input type="radio" name="gender" class="h-3.5 w-3.5 text-purple-600 filterGender" value="male">
+                                                <span class="mr-1.5 text-xs text-gray-700">@lang('Male')</span>
+                                            </label>
+                                            <label class="flex items-center justify-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                                <input type="radio" name="gender" class="h-3.5 w-3.5 text-purple-600 filterGender" value="female">
+                                                <span class="mr-1.5 text-xs text-gray-700">@lang('Female')</span>
+                                            </label>
                                         </div>
-                                    @endforeach
-                                @endif
-                            </div>
-                        </div>
-
-                        <!-- Wilaya (Location) -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('Location (Wilaya)')</h4>
-                            <select id="filter_wilaya" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-purple-500 focus:border-purple-500">
-                                <option value="">@lang('All Locations')</option>
-                                @if($wilayas ?? false)
-                                    @foreach($wilayas as $wilaya)
-                                        <option value="{{ $wilaya->id }}">{{ __($wilaya->name) }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-
-                        <!-- Gender Filter -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('Gender')</h4>
-                            <div class="space-y-2">
-                                <div class="flex items-center">
-                                    <input id="gender_all" type="radio" name="gender" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 filterGender" value="" checked>
-                                    <label for="gender_all" class="mr-3 text-sm text-gray-700">@lang('All')</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input id="gender_male" type="radio" name="gender" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 filterGender" value="male">
-                                    <label for="gender_male" class="mr-3 text-sm text-gray-700">@lang('Male')</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input id="gender_female" type="radio" name="gender" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 filterGender" value="female">
-                                    <label for="gender_female" class="mr-3 text-sm text-gray-700">@lang('Female')</label>
+                                    </div>
+                                    <div>
+                                        <label class="text-xs font-medium text-gray-600 mb-1 block">@lang('Age Range')</label>
+                                        <select id="filter_age" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white">
+                                            <option value="">@lang('All Ages')</option>
+                                            <option value="18-24">18-24</option>
+                                            <option value="25-34">25-34</option>
+                                            <option value="35-44">35-44</option>
+                                            <option value="45+">45+</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Age Range -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('Age Range')</h4>
-                            <select id="filter_age" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-purple-500 focus:border-purple-500">
-                                <option value="">@lang('All Ages')</option>
-                                <option value="18-24">18-24</option>
-                                <option value="25-34">25-34</option>
-                                <option value="35-44">35-44</option>
-                                <option value="45+">45+</option>
-                            </select>
-                        </div>
-
-                        <!-- Language -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('Language')</h4>
-                            <select id="filter_lang" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-purple-500 focus:border-purple-500">
-                                <option value="">@lang('All Languages')</option>
-                                <option value="ar">@lang('Arabic')</option>
-                                <option value="fr">@lang('French')</option>
-                                <option value="en">@lang('English')</option>
-                            </select>
-                        </div>
-
-                        <!-- Audience Gender -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('Audience Gender')</h4>
-                            <select id="filter_gender_audience" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-purple-500 focus:border-purple-500">
-                                <option value="">@lang('All')</option>
-                                <option value="male">@lang('Mostly Male')</option>
-                                <option value="female">@lang('Mostly Female')</option>
-                            </select>
-                        </div>
-
-                        <!-- Audience Age -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('Audience Age')</h4>
-                            <select id="filter_audience_age" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-purple-500 focus:border-purple-500">
-                                <option value="">@lang('All Ages')</option>
-                                <option value="18-24">18-24</option>
-                                <option value="25-34">25-34</option>
-                                <option value="35-44">35-44</option>
-                                <option value="45+">45+</option>
-                            </select>
-                        </div>
-
-                        <!-- Audience Location -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('Audience Location')</h4>
-                            <select id="filter_wilaya_audience" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-purple-500 focus:border-purple-500">
-                                <option value="">@lang('All Locations')</option>
-                                @if($wilayas ?? false)
-                                    @foreach($wilayas as $wilaya)
-                                        <option value="{{ $wilaya->id }}">{{ __($wilaya->name) }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-
-                        <!-- Average Interactions -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('Avg Interactions')</h4>
-                            <input type="number" id="average_interactions" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-purple-500 focus:border-purple-500" placeholder="0">
-                        </div>
-
-                        <!-- Rating Filter -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('influencers.rating')</h4>
-                            <div class="space-y-2">
-                                <div class="flex items-center">
-                                    <input id="rating_5" type="radio" name="rating"
-                                        class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 filterRating"
-                                        value="5">
-                                    <label for="rating_5" class="mr-3 text-sm text-gray-700 flex items-center">
-                                        <span class="text-yellow-400">★★★★★</span>
-                                        <span class="mr-2">5 @lang('influencers.stars')</span>
+                    <!-- Categories Section -->
+                    <div class="mb-6 pb-6 border-b border-gray-200">
+                        <h3 class="text-base font-semibold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="grid" class="h-5 w-5 ml-2 text-purple-600"></i>
+                            @lang('influencers.categories')
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 max-h-40 overflow-y-auto custom-scrollbar p-3 bg-gray-50 rounded-lg">
+                            @if($allCategory ?? false)
+                                @foreach($allCategory as $category)
+                                    <label class="flex items-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                        <input type="checkbox" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded filterCategory" value="{{ $category->id }}">
+                                        <span class="mr-2 text-sm text-gray-700">{{ __($category->name) }}</span>
                                     </label>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Followers & Engagement Section -->
+                    <div class="mb-6 pb-6 border-b border-gray-200">
+                        <h3 class="text-base font-semibold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="trending-up" class="h-5 w-5 ml-2 text-purple-600"></i>
+                            @lang('Reach & Engagement')
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Followers Range -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-3">@lang('Followers Range')</h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="text-xs text-gray-600 mb-1 block">@lang('Min')</label>
+                                        <input type="number" id="followers_min" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500" placeholder="0">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-gray-600 mb-1 block">@lang('Max')</label>
+                                        <input type="number" id="followers_max" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500" placeholder="1M">
+                                    </div>
                                 </div>
-                                <div class="flex items-center">
-                                    <input id="rating_4" type="radio" name="rating"
-                                        class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 filterRating"
-                                        value="4">
-                                    <label for="rating_4" class="mr-3 text-sm text-gray-700 flex items-center">
-                                        <span class="text-yellow-400">★★★★☆</span>
-                                        <span class="mr-2">4+ @lang('influencers.stars')</span>
+                            </div>
+
+                            <!-- Average Interactions -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-3">@lang('Min Avg Interactions')</h4>
+                                <input type="number" id="average_interactions" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audience Insights Section -->
+                    <div class="mb-6 pb-6 border-b border-gray-200">
+                        <h3 class="text-base font-semibold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="users-round" class="h-5 w-5 ml-2 text-purple-600"></i>
+                            @lang('Audience Insights')
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                            <!-- Audience Gender -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-3">@lang('Audience Gender')</h4>
+                                <select id="filter_gender_audience" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white">
+                                    <option value="">@lang('All')</option>
+                                    <option value="male">@lang('Mostly Male')</option>
+                                    <option value="female">@lang('Mostly Female')</option>
+                                </select>
+                            </div>
+
+                            <!-- Audience Age -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-3">@lang('Audience Age')</h4>
+                                <select id="filter_audience_age" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white">
+                                    <option value="">@lang('All Ages')</option>
+                                    <option value="18-24">18-24</option>
+                                    <option value="25-34">25-34</option>
+                                    <option value="35-44">35-44</option>
+                                    <option value="45+">45+</option>
+                                </select>
+                            </div>
+
+                            <!-- Audience Location -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-3">@lang('Audience Location')</h4>
+                                <select id="filter_wilaya_audience" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white">
+                                    <option value="">@lang('All Locations')</option>
+                                    @if($wilayas ?? false)
+                                        @foreach($wilayas as $wilaya)
+                                            <option value="{{ $wilaya->id }}">{{ __($wilaya->name) }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quality & Performance Section -->
+                    <div class="mb-6">
+                        <h3 class="text-base font-semibold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="star" class="h-5 w-5 ml-2 text-purple-600"></i>
+                            @lang('Quality & Performance')
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Language -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center">
+                                    <i data-lucide="languages" class="h-4 w-4 ml-2 text-purple-600"></i>
+                                    @lang('Language')
+                                </h4>
+                                <select id="filter_lang" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white">
+                                    <option value="">@lang('All Languages')</option>
+                                    <option value="ar">@lang('Arabic')</option>
+                                    <option value="fr">@lang('French')</option>
+                                    <option value="en">@lang('English')</option>
+                                </select>
+                            </div>
+
+                            <!-- Rating Filter -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-3">@lang('influencers.rating')</h4>
+                                <div class="space-y-2">
+                                    <label class="flex items-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                        <input type="radio" name="rating" class="h-3.5 w-3.5 text-purple-600 filterRating" value="5">
+                                        <span class="mr-2 flex items-center gap-1 text-sm">
+                                            <span class="text-yellow-400 text-base">★★★★★</span>
+                                            <span class="text-gray-700">5</span>
+                                        </span>
                                     </label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input id="rating_3" type="radio" name="rating"
-                                        class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 filterRating"
-                                        value="3">
-                                    <label for="rating_3" class="mr-3 text-sm text-gray-700 flex items-center">
-                                        <span class="text-yellow-400">★★★☆☆</span>
-                                        <span class="mr-2">3+ @lang('influencers.stars')</span>
+                                    <label class="flex items-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                        <input type="radio" name="rating" class="h-3.5 w-3.5 text-purple-600 filterRating" value="4">
+                                        <span class="mr-2 flex items-center gap-1 text-sm">
+                                            <span class="text-yellow-400 text-base">★★★★☆</span>
+                                            <span class="text-gray-700">4+</span>
+                                        </span>
+                                    </label>
+                                    <label class="flex items-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                        <input type="radio" name="rating" class="h-3.5 w-3.5 text-purple-600 filterRating" value="3">
+                                        <span class="mr-2 flex items-center gap-1 text-sm">
+                                            <span class="text-yellow-400 text-base">★★★☆☆</span>
+                                            <span class="text-gray-700">3+</span>
+                                        </span>
                                     </label>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Completed Jobs -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('Min Completed Jobs')</h4>
-                            <input type="number" id="completed_job" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-purple-500 focus:border-purple-500" placeholder="0">
-                        </div>
+                            <!-- Completed Jobs & Sort -->
+                            <div class="space-y-4">
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <h4 class="text-sm font-semibold text-gray-900 mb-3">@lang('Min Completed Jobs')</h4>
+                                    <input type="number" id="completed_job" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500" placeholder="0">
+                                </div>
 
-                        <!-- Sort Options -->
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">@lang('influencers.sort_by')</h4>
-                            <div class="space-y-2">
-                                <div class="flex items-center">
-                                    <input id="sort_latest" type="radio" name="sort"
-                                        class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 filterSort"
-                                        value="latest" checked>
-                                    <label for="sort_latest"
-                                        class="mr-3 text-sm text-gray-700">@lang('influencers.latest')</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input id="sort_rating" type="radio" name="sort"
-                                        class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 filterSort"
-                                        value="rating">
-                                    <label for="sort_rating"
-                                        class="mr-3 text-sm text-gray-700">@lang('influencers.highest_rated')</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input id="sort_popular" type="radio" name="sort"
-                                        class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 filterSort"
-                                        value="popular">
-                                    <label for="sort_popular"
-                                        class="mr-3 text-sm text-gray-700">@lang('influencers.most_popular')</label>
+                                <!-- Sort Options -->
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center">
+                                        <i data-lucide="arrow-up-down" class="h-4 w-4 ml-2 text-purple-600"></i>
+                                        @lang('influencers.sort_by')
+                                    </h4>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                            <input type="radio" name="sort" class="h-3.5 w-3.5 text-purple-600 filterSort" value="latest" checked>
+                                            <span class="mr-2 text-sm text-gray-700">@lang('influencers.latest')</span>
+                                        </label>
+                                        <label class="flex items-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                            <input type="radio" name="sort" class="h-3.5 w-3.5 text-purple-600 filterSort" value="rating">
+                                            <span class="mr-2 text-sm text-gray-700">@lang('influencers.highest_rated')</span>
+                                        </label>
+                                        <label class="flex items-center p-2 bg-white rounded border border-gray-200 hover:border-purple-300 cursor-pointer transition-colors">
+                                            <input type="radio" name="sort" class="h-3.5 w-3.5 text-purple-600 filterSort" value="popular">
+                                            <span class="mr-2 text-sm text-gray-700">@lang('influencers.most_popular')</span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <!-- Modal Footer with Action Buttons -->
+                <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
                     <button type="button"
-                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm"
-                        onclick="applyFilters()">
-                        @lang('influencers.apply_filters')
+                        class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
+                        onclick="clearFilters()">
+                        <i data-lucide="x-circle" class="h-5 w-5 ml-2"></i>
+                        @lang('influencers.clear_filters')
                     </button>
                     <button type="button"
-                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:mt-0 sm:w-auto sm:text-sm"
-                        onclick="clearFilters()">
-                        @lang('influencers.clear_filters')
+                        class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-xl text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all"
+                        onclick="applyFilters()">
+                        <i data-lucide="check-circle" class="h-5 w-5 ml-2"></i>
+                        @lang('influencers.apply_filters')
                     </button>
                 </div>
             </div>
@@ -509,9 +556,11 @@
 
 @push('script')
     <script>
+        // Global variables
+        let page = null;
+
         (function ($) {
             "use strict";
-            let page = null;
 
             // Search functionality
             $('.searchBtn').on('click', function () {
@@ -526,116 +575,23 @@
             });
 
             // Pagination
-            $(document).on('click', '.pagination a', function (event) {
+            $(document).on('click', '.pagination-link', function (event) {
                 event.preventDefault();
                 page = $(this).attr('href').split('page=')[1];
                 fetchInfluencer();
             });
 
-            function fetchInfluencer() {
-                $('.loader-wrapper').removeClass('hidden');
-
-                let data = {};
-
-                // Social Media Platforms
-                data.social = [];
-                $('.filterSocial:checked').each(function () {
-                    data.social.push($(this).val());
-                });
-
-                // Followers Range
-                data.followers_min = $('#followers_min').val() || "";
-                data.followers_max = $('#followers_max').val() || "";
-
-                // Categories
-                data.category = [];
-                $('.filterCategory:checked').each(function () {
-                    data.category.push($(this).val());
-                });
-
-                // Location (Wilaya)
-                data.wilaya = $('#filter_wilaya').val() || "";
-
-                // Gender
-                data.gender = $('.filterGender:checked').val() || "";
-
-                // Age Range
-                data.age = $('#filter_age').val() || "";
-
-                // Language
-                data.lang = $('#filter_lang').val() || "";
-
-                // Audience Gender
-                data.gender_audience = $('#filter_gender_audience').val() || "";
-
-                // Audience Age
-                data.audience_age = $('#filter_audience_age').val() || "";
-
-                // Audience Location
-                data.wilaya_audience = $('#filter_wilaya_audience').val() || "";
-
-                // Average Interactions
-                data.average_interactions = $('#average_interactions').val() || "";
-
-                // Rating
-                data.rating = $('.filterRating:checked').val() || "";
-
-                // Completed Jobs
-                data.completedJob = $('#completed_job').val() || "";
-
-                // Search
-                data.search = $('.mySearch').val() || "";
-
-                // Sort
-                data.sort = $('.filterSort:checked').val() || "";
-
-                // Category ID (if needed)
-                data.categoryId = "";
-
-                let url = `{{ localized_route('influencer.filter') }}`;
-
-                if (page) {
-                    url = `{{ localized_route('influencer.filter') }}?page=${page}`;
-                }
-
-                $.ajax({
-                    method: "GET",
-                    url: url,
-                    data: data,
-                    success: function (response) {
-                        $('#influencers').html(response);
-                        // Re-initialize Lucide icons for new elements
-                        if (typeof lucide !== 'undefined') {
-                            lucide.createIcons();
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error fetching influencers:', error);
-                        $('.loader-wrapper').addClass('hidden');
-                    }
-                }).done(function () {
-                    $('.loader-wrapper').addClass('hidden');
-                });
-            }
-
         })(jQuery);
 
-        // Modal functionality
-        function toggleFilterModal() {
-            const modal = document.getElementById('filterModal');
-            modal.classList.toggle('hidden');
-            document.body.classList.toggle('overflow-hidden');
-        }
-
-        function applyFilters() {
-            toggleFilterModal();
+        // Global function for fetching influencers
+        function fetchInfluencer() {
             $('.loader-wrapper').removeClass('hidden');
 
             let data = {};
 
             // Social Media Platforms
             data.social = [];
-            $('.filterSocial:checked').each(function () {
+            $('.filterSocial:checked').each(function() {
                 data.social.push($(this).val());
             });
 
@@ -645,12 +601,13 @@
 
             // Categories
             data.category = [];
-            $('.filterCategory:checked').each(function () {
+            $('.filterCategory:checked').each(function() {
                 data.category.push($(this).val());
             });
 
-            // Location (Wilaya)
-            data.wilaya = $('#filter_wilaya').val() || "";
+            // Location (Wilaya) - Convert to array if value exists
+            const wilayaValue = $('#filter_wilaya').val();
+            data.wilaya = wilayaValue ? [wilayaValue] : [];
 
             // Gender
             data.gender = $('.filterGender:checked').val() || "";
@@ -658,8 +615,9 @@
             // Age Range
             data.age = $('#filter_age').val() || "";
 
-            // Language
-            data.lang = $('#filter_lang').val() || "";
+            // Language - Convert to array for backend compatibility
+            const langValue = $('#filter_lang').val();
+            data.lang = langValue ? [langValue] : [];
 
             // Audience Gender
             data.gender_audience = $('#filter_gender_audience').val() || "";
@@ -667,8 +625,9 @@
             // Audience Age
             data.audience_age = $('#filter_audience_age').val() || "";
 
-            // Audience Location
-            data.wilaya_audience = $('#filter_wilaya_audience').val() || "";
+            // Audience Location - Convert to array if value exists
+            const wilayaAudienceValue = $('#filter_wilaya_audience').val();
+            data.wilaya_audience = wilayaAudienceValue ? [wilayaAudienceValue] : [];
 
             // Average Interactions
             data.average_interactions = $('#average_interactions').val() || "";
@@ -688,68 +647,111 @@
             // Category ID (if needed)
             data.categoryId = "";
 
-            let url = `{{ localized_route('influencer.filter') }}`;
-
+            // Add page parameter if exists
             if (page) {
-                url = `{{ localized_route('influencer.filter') }}?page=${page}`;
+                data.page = page;
             }
 
+            let url = `{{ localized_route('influencer.filter') }}`;
+
+            console.log('Fetching influencers with data:', data);
+
+            // Use jQuery AJAX
             $.ajax({
-                method: "GET",
                 url: url,
+                method: 'GET',
                 data: data,
-                success: function (response) {
-                    $('#influencers').html(response);
-                    // Re-initialize Lucide icons for new elements
+                dataType: 'html',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function(html) {
+                    console.log('HTML received, length:', html.length);
+                    $('#influencers').html(html);
+
+                    // Re-initialize Lucide icons
                     if (typeof lucide !== 'undefined') {
                         lucide.createIcons();
                     }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error fetching influencers:', error);
+
                     $('.loader-wrapper').addClass('hidden');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching influencers:', {
+                        status: xhr.status,
+                        statusText: xhr.statusText,
+                        error: error,
+                        response: xhr.responseText
+                    });
+
+                    $('.loader-wrapper').addClass('hidden');
+
+                    let errorMessage = 'Error loading influencers. Please try again.';
+                    if (xhr.status === 500) {
+                        errorMessage = 'Server error. Please contact support if this persists.';
+                    } else if (xhr.status === 404) {
+                        errorMessage = 'Filter endpoint not found. Please refresh the page.';
+                    }
+
+                    alert(errorMessage + '\n\nStatus: ' + xhr.status);
                 }
-            }).done(function () {
-                $('.loader-wrapper').addClass('hidden');
             });
+        }
+
+        // Modal functionality
+        function toggleFilterModal() {
+            $('#filterModal').toggleClass('hidden');
+            $('body').toggleClass('overflow-hidden');
+        }
+
+        function applyFilters() {
+            toggleFilterModal();
+            // Reset page to 1 when applying new filters
+            page = null;
+            // Just call fetchInfluencer since it has all the logic
+            fetchInfluencer();
         }
 
         function clearFilters() {
             // Clear all checkboxes
-            document.querySelectorAll('.filterCategory').forEach(cb => cb.checked = false);
-            document.querySelectorAll('.filterSocial').forEach(cb => cb.checked = false);
-            document.querySelectorAll('.filterRating').forEach(rb => rb.checked = false);
-            document.querySelectorAll('.filterGender').forEach(rb => rb.checked = false);
+            $('.filterCategory').prop('checked', false);
+            $('.filterSocial').prop('checked', false);
+            $('.filterRating').prop('checked', false);
 
             // Reset text/number inputs
-            document.getElementById('followers_min').value = '';
-            document.getElementById('followers_max').value = '';
-            document.getElementById('average_interactions').value = '';
-            document.getElementById('completed_job').value = '';
+            $('#followers_min').val('');
+            $('#followers_max').val('');
+            $('#average_interactions').val('');
+            $('#completed_job').val('');
 
             // Reset select dropdowns
-            document.getElementById('filter_wilaya').value = '';
-            document.getElementById('filter_age').value = '';
-            document.getElementById('filter_lang').value = '';
-            document.getElementById('filter_gender_audience').value = '';
-            document.getElementById('filter_audience_age').value = '';
-            document.getElementById('filter_wilaya_audience').value = '';
+            $('#filter_wilaya').val('');
+            $('#filter_age').val('');
+            $('#filter_lang').val('');
+            $('#filter_gender_audience').val('');
+            $('#filter_audience_age').val('');
+            $('#filter_wilaya_audience').val('');
 
             // Reset gender to "All"
-            document.getElementById('gender_all').checked = true;
+            $('#gender_all').prop('checked', true);
 
             // Reset sort to latest
-            document.getElementById('sort_latest').checked = true;
+            $('#sort_latest').prop('checked', true);
+
+            // Reset search
+            $('.mySearch').val('');
+
+            // Reset page
+            page = null;
 
             // Apply cleared filters
             applyFilters();
         }
 
         // Close modal on escape key
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                const modal = document.getElementById('filterModal');
-                if (!modal.classList.contains('hidden')) {
+        $(document).on('keydown', function (e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                if (!$('#filterModal').hasClass('hidden')) {
                     toggleFilterModal();
                 }
             }

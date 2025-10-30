@@ -6,7 +6,9 @@ return [
     'home' => 'الرئيسية',
     'overview' => 'نظرة عامة',
     'welcome_back' => 'مرحباً بعودتك',
+    'welcome_message' => 'مرحباً، :name!',
     'dashboard_overview_desc' => 'إليك ما يحدث مع حسابك',
+    'platform_activity_overview' => 'هنا نظرة عامة على نشاطك على المنصة',
 
     // Navigation
     'navigation' => 'التنقل',
@@ -14,9 +16,14 @@ return [
 
     // Statistics
     'current_balance' => 'الرصيد الحالي',
+    'total_withdrawals' => 'إجمالي مبلغ السحب',
+    'total_transactions' => 'إجمالي المعاملات',
     'total_campaigns' => 'إجمالي الحملات',
     'total_orders' => 'إجمالي الطلبات',
+    'total_offers' => 'إجمالي العروض',
     'total_hiring' => 'إجمالي التوظيف',
+    'total_jobs' => 'إجمالي الوظائف',
+    'total_services' => 'إجمالي الخدمات',
     'active' => 'نشط',
     'pending' => 'قيد الانتظار',
     'completed' => 'مكتمل',
@@ -46,7 +53,12 @@ return [
 
     // Quick actions
     'quick_actions' => 'إجراءات سريعة',
+    'manage_services_quickly' => 'إدارة خدماتك وطلباتك بسرعة',
     'create_campaign' => 'إنشاء حملة',
+    'create_service' => 'إنشاء خدمة',
+    'view_orders' => 'عرض الطلبات',
+    'manage_campaigns' => 'إدارة الحملات',
+    'request_withdrawal' => 'طلب سحب',
     'start_new_campaign' => 'بدء حملة تسويقية جديدة',
     'find_influencers' => 'العثور على المؤثرين',
     'browse_influencers' => 'تصفح المؤثرين المتاحين',
@@ -64,6 +76,23 @@ return [
     'no_transactions' => 'لا توجد معاملات بعد',
     'transactions_will_appear_here' => 'ستظهر معاملاتك هنا',
     'transactions' => 'المعاملات',
+
+    // Charts
+    'orders_distribution' => 'توزيع الطلبات',
+    'service_orders_status' => 'حالة طلبات خدماتك',
+    'jobs_distribution' => 'توزيع الوظائف',
+    'recruitment_projects_status' => 'حالة مشاريع التوظيف الخاصة بك',
+    'no_orders_yet' => 'لا توجد طلبات حتى الآن',
+    'no_jobs_yet' => 'لا توجد وظائف حتى الآن',
+
+    // Status labels
+    'status_pending' => 'قيد الانتظار',
+    'status_completed' => 'مكتملة',
+    'status_in_progress' => 'قيد التنفيذ',
+    'status_cancelled' => 'ملغاة',
+    'status_job_done' => 'العمل منجز',
+    'status_reported' => 'مبلغ عنها',
+    'status_rejected' => 'مرفوضة',
 
     // Settings
     'account_settings' => 'إعدادات الحساب',

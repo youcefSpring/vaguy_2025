@@ -12,53 +12,54 @@
 @php
     $currentPath = request()->path();
     $isRTL = app()->getLocale() === 'ar';
+    $locale = app()->getLocale();
 
-    // Structure finale selon votre demande
+    // Structure finale - store translation KEYS, not translated strings
     $sidebarSections = [
         // 1. لوحة التحكم (non groupé)
         [
-            'title' => __('لوحة التحكم'),
+            'title_key' => 'navbar.dashboard',
             'icon' => 'home',
-            'url' => '/client/dashboard',
+            'url' => "/{$locale}/client/dashboard",
             'route' => 'user.home'
         ],
 
         // 2. تصفح المنصة (non groupé, placé après dashboard)
         [
-            'title' => __('المؤثرين'),
+            'title_key' => 'navbar.influencers',
             'icon' => 'users',
-            'url' => '/getinf',
+            'url' => "/{$locale}/getinf",
             'route' => 'influencers'
         ],
         [
-            'title' => __('الخدمات'),
+            'title_key' => 'navbar.services',
             'icon' => 'grid-3x3-gap',
-            'url' => '/services',
+            'url' => "/{$locale}/services",
             'route' => 'services'
         ],
 
         // 3. الأعمال والخدمات (section groupée)
         [
             'section' => true,
-            'title' => __('الأعمال والخدمات'),
+            'title_key' => 'navbar.business_and_services',
             'icon' => 'briefcase',
             'items' => [
                 [
-                    'title' => __('عروض العمل'),
+                    'title_key' => 'navbar.job_offers',
                     'icon' => 'user-plus',
-                    'url' => '/client/hiring/all',
+                    'url' => "/{$locale}/client/hiring/all",
                     'route' => 'user.hiring.history'
                 ],
                 [
-                    'title' => __('الطلبات'),
+                    'title_key' => 'navbar.orders',
                     'icon' => 'package',
-                    'url' => '/client/order/all',
+                    'url' => "/{$locale}/client/order/all",
                     'route' => 'user.order.all'
                 ],
                 [
-                    'title' => __('الحملات'),
+                    'title_key' => 'navbar.campaigns',
                     'icon' => 'megaphone',
-                    'url' => '/client/campaign',
+                    'url' => "/{$locale}/client/campaign",
                     'route' => 'user_campaign'
                 ]
             ]
@@ -67,19 +68,19 @@
         // 4. التواصل والدعم (section groupée)
         [
             'section' => true,
-            'title' => __('التواصل والدعم'),
+            'title_key' => 'navbar.communication_and_support',
             'icon' => 'message-circle',
             'items' => [
                 [
-                    'title' => __('المحادثات'),
+                    'title_key' => 'navbar.conversations',
                     'icon' => 'messages',
-                    'url' => '/client/conversation/influencers',
+                    'url' => "/{$locale}/client/conversation/influencers",
                     'route' => 'user.conversation.index'
                 ],
                 [
-                    'title' => __('بطاقة الدعم'),
+                    'title_key' => 'navbar.support_tickets',
                     'icon' => 'headphones',
-                    'url' => '/ticket',
+                    'url' => "/{$locale}/ticket",
                     'route' => 'ticket'
                 ]
             ]
@@ -88,31 +89,31 @@
         // 5. الحساب والمعاملات (section groupée)
         [
             'section' => true,
-            'title' => __('الحساب والمعاملات'),
+            'title_key' => 'navbar.account_and_transactions',
             'icon' => 'wallet',
             'items' => [
                 [
-                    'title' => __('الإيداع'),
+                    'title_key' => 'navbar.deposit',
                     'icon' => 'banknote',
-                    'url' => '/client/deposit/history',
+                    'url' => "/{$locale}/client/deposit/history",
                     'route' => 'user.deposit.history'
                 ],
                 [
-                    'title' => __('المعاملات'),
+                    'title_key' => 'navbar.transactions',
                     'icon' => 'arrow-left-right',
-                    'url' => '/client/transactions',
+                    'url' => "/{$locale}/client/transactions",
                     'route' => 'user.transactions'
                 ],
                 [
-                    'title' => __('الآراء'),
+                    'title_key' => 'navbar.reviews',
                     'icon' => 'star',
-                    'url' => '/client/review/order/index',
+                    'url' => "/{$locale}/client/review/order/index",
                     'route' => 'user.review.order.index'
                 ],
                 [
-                    'title' => __('القائمة المفضلة'),
+                    'title_key' => 'navbar.favorites',
                     'icon' => 'heart',
-                    'url' => '/client/favorite/list',
+                    'url' => "/{$locale}/client/favorite/list",
                     'route' => 'user.favorite.list'
                 ]
             ]
@@ -174,7 +175,7 @@
                                             data-lucide="{{ $section['icon'] }}"
                                             class="h-6 w-6 shrink-0 {{ $hasActiveItem ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600' }}"
                                         ></i>
-                                        <span class="flex-grow {{ $isRTL ? 'text-right' : 'text-left' }}">{{ $section['title'] }}</span>
+                                        <span class="flex-grow {{ $isRTL ? 'text-right' : 'text-left' }}">{{ __($section['title_key']) }}</span>
                                         <i
                                             data-lucide="chevron-down"
                                             class="h-4 w-4 transition-transform duration-200"
@@ -193,7 +194,7 @@
                                                        onclick="window.showProgressBar && window.showProgressBar()"
                                                     >
                                                         <i data-lucide="{{ $item['icon'] }}" class="h-5 w-5 shrink-0 {{ $itemIsActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600' }}"></i>
-                                                        {{ $item['title'] }}
+                                                        {{ __($item['title_key']) }}
                                                         @if($itemIsActive)
                                                             <span class="ml-auto w-2 h-2 bg-blue-600 rounded-full"></span>
                                                         @endif
@@ -212,7 +213,7 @@
                                        onclick="window.showProgressBar && window.showProgressBar()"
                                     >
                                         <i data-lucide="{{ $section['icon'] }}" class="h-6 w-6 shrink-0 {{ $itemIsActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600' }}"></i>
-                                        {{ $section['title'] }}
+                                        {{ __($section['title_key']) }}
                                         @if($itemIsActive)
                                             <span class="ml-auto w-2 h-2 bg-blue-600 rounded-full"></span>
                                         @endif
@@ -225,12 +226,12 @@
 
                 {{-- Settings - toujours en bas --}}
                 <li class="mt-auto">
-                    <a href="/client/profile-setting"
+                    <a href="/{{ $locale }}/client/profile-setting"
                        class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors duration-200"
                        onclick="window.showProgressBar && window.showProgressBar()"
                     >
                         <i data-lucide="settings" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-blue-600"></i>
-                        {{ __('إعدادات الحساب') }}
+                        {{ __('navbar.account_settings') }}
                     </a>
                 </li>
             </ul>
@@ -282,7 +283,7 @@
                                                     data-lucide="{{ $section['icon'] }}"
                                                     class="h-6 w-6 shrink-0 {{ $hasActiveItem ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600' }}"
                                                 ></i>
-                                                <span class="flex-grow {{ $isRTL ? 'text-right' : 'text-left' }}">{{ $section['title'] }}</span>
+                                                <span class="flex-grow {{ $isRTL ? 'text-right' : 'text-left' }}">{{ __($section['title_key']) }}</span>
                                                 <i
                                                     data-lucide="chevron-down"
                                                     class="h-4 w-4 transition-transform duration-200"
@@ -302,7 +303,7 @@
                                                                onclick="window.showProgressBar && window.showProgressBar()"
                                                             >
                                                                 <i data-lucide="{{ $item['icon'] }}" class="h-5 w-5 shrink-0 {{ $itemIsActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600' }}"></i>
-                                                                {{ $item['title'] }}
+                                                                {{ __($item['title_key']) }}
                                                                 @if($itemIsActive)
                                                                     <span class="ml-auto w-2 h-2 bg-blue-600 rounded-full"></span>
                                                                 @endif
@@ -322,7 +323,7 @@
                                                onclick="window.showProgressBar && window.showProgressBar()"
                                             >
                                                 <i data-lucide="{{ $section['icon'] }}" class="h-6 w-6 shrink-0 {{ $itemIsActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600' }}"></i>
-                                                {{ $section['title'] }}
+                                                {{ __($section['title_key']) }}
                                                 @if($itemIsActive)
                                                     <span class="ml-auto w-2 h-2 bg-blue-600 rounded-full"></span>
                                                 @endif
@@ -335,13 +336,13 @@
 
                         {{-- Mobile Settings --}}
                         <li class="mt-auto">
-                            <a href="/client/profile-setting"
+                            <a href="/{{ $locale }}/client/profile-setting"
                                class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors duration-200"
                                @click="sidebarOpen = false"
                                onclick="window.showProgressBar && window.showProgressBar()"
                             >
                                 <i data-lucide="settings" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-blue-600"></i>
-                                {{ __('إعدادات الحساب') }}
+                                {{ __('navbar.account_settings') }}
                             </a>
                         </li>
                     </ul>

@@ -42,6 +42,7 @@ use App\Models\CampainInfluencerOffer;
 use Illuminate\Support\Facades\Redirect;
 use  App\Services\EmailService;
 use App\Jobs\SendEmailJob;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 class SiteController extends Controller {
 
     public function send_campain_email_notification($details,$destinations){
@@ -208,15 +209,56 @@ class SiteController extends Controller {
     }
 
     public function changeLanguage($lang = null) {
+        // Validate language exists in database
         $language = Language::where('code', $lang)->first();
-        // dd($language);
 
         if (!$language) {
-            $lang = 'en';
+            $lang = 'en'; // Fallback to default
         }
 
+        // Update session FIRST before any redirects
         session()->put('lang', $lang);
-        return back();
+        session()->save(); // Force save the session
+
+        // Get the previous URL (where user was before clicking language switcher)
+        $previousUrl = url()->previous();
+
+        // Parse URL to get the path
+        $parsedUrl = parse_url($previousUrl);
+        $path = $parsedUrl['path'] ?? '/';
+
+        // Get supported locales
+        $supportedLocales = array_keys(config('laravellocalization.supportedLocales', ['en' => [], 'fr' => [], 'ar' => []]));
+
+        // Split path into segments
+        $segments = array_filter(explode('/', $path));
+        $segments = array_values($segments); // Re-index array
+
+        // Check if first segment is a locale and remove it
+        if (!empty($segments) && in_array($segments[0], $supportedLocales)) {
+            array_shift($segments);
+        }
+
+        // Build new URL with new locale
+        $newPath = '/' . $lang;
+        if (!empty($segments)) {
+            $newPath .= '/' . implode('/', $segments);
+        }
+
+        // Preserve query string if it exists
+        if (isset($parsedUrl['query'])) {
+            $newPath .= '?' . $parsedUrl['query'];
+        }
+
+        // Log for debugging (can be removed later)
+        \Log::info('Language change:', [
+            'from_url' => $previousUrl,
+            'to_url' => $newPath,
+            'new_lang' => $lang,
+            'session_before' => session('lang'),
+        ]);
+
+        return redirect($newPath);
     }
 
     public function cookieAccept() {
@@ -666,178 +708,344 @@ class SiteController extends Controller {
   }
 
     public function filterInfluencer(Request $request) {
-        $influencers = $this->getInfluencer($request);
-        $influencersId    = Favorite::where('user_id', auth()->id())
-                                   ->select('influencer_id')
-                                   ->pluck('influencer_id')
-                                   ->toArray();
+        try {
+            $influencers = $this->getInfluencer($request);
 
+            // Only fetch favorites if user is authenticated
+            if (auth()->check()) {
+                $influencersId = Favorite::where('user_id', auth()->id())
+                                       ->pluck('influencer_id')
+                                       ->toArray();
+            } else {
+                $influencersId = [];
+            }
 
-        return view($this->activeTemplate . 'filtered_influencer', compact('influencers'));
+            return view($this->activeTemplate . 'filtered_influencer', compact('influencers'));
+        } catch (\Exception $e) {
+            \Log::error('Filter influencer error: ' . $e->getMessage(), [
+                'request' => $request->all(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            // Return error response for AJAX requests
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'error' => 'An error occurred while filtering influencers.',
+                    'message' => config('app.debug') ? $e->getMessage() : 'Please try again.'
+                ], 500);
+            }
+
+            return back()->with('error', 'An error occurred while filtering influencers.');
+        }
     }
 
     protected function getInfluencer($request) {
-        $influencers = Influencer::active();
+        try {
+            $influencers = Influencer::active();
+        } catch (\Exception $e) {
+            \Log::error('Error initializing influencer query: ' . $e->getMessage());
+            throw $e;
+        }
         if (isset($request->social) && is_array($request->social) && count($request->social) > 0) {
-            $s=$request->social;
-            //  dd($s);
-            $influencerId = SocialLink::where(function ($query) use ($s) {
-                $query->orWhere(function ($query) use ($s) {
-                    foreach ($s as $value) {
-                        $query->orWhere('social_icon', 'like', "%$value%");
-                    }
-                });
+            $socialPlatforms = $request->social;
+
+            // Search in social_links table (uses social_icon field with HTML)
+            $influencerId1 = SocialLink::where(function ($query) use ($socialPlatforms) {
+                foreach ($socialPlatforms as $platform) {
+                    $query->orWhere('social_icon', 'like', "%$platform%");
+                }
             })
             ->pluck('influencer_id')
             ->toArray();
 
-        $influencerId_statistics = Statistic::whereIn('social', $request->social)
-                                            ->pluck('influencer_id')
-                                            ->toArray();
-
-        $influencerId = array_merge($influencerId, $influencerId_statistics);
-        // dd($influencerId);
-        $influencers  = $influencers->whereIn('id', $influencerId);
-            //   dd($influencers->all());
-
-
-        }
-        // return $influencers;
-        if (isset($request->average_interactions) ) {
-            $s=$request->average_interactions;
-            $influencerId = Statistic::where('average_interactions', $s)
+            // Search in statistics table (uses 'social' field directly)
+            $influencerId2 = Statistic::whereIn('social', $socialPlatforms)
                                       ->pluck('influencer_id')
                                       ->toArray();
 
-            $influencers  = $influencers->whereIn('id', $influencerId);
+            // Merge and get unique influencer IDs
+            $influencerId = array_unique(array_merge($influencerId1, $influencerId2));
+
+            // Only apply filter if we have results
+            if (!empty($influencerId)) {
+                $influencers = $influencers->whereIn('id', $influencerId);
+            } else {
+                // No influencers found with these social platforms - return empty result
+                $influencers = $influencers->whereRaw('1 = 0');
+            }
+            //   dd($influencers->all());
+        }
+        // return $influencers;
+        if (isset($request->average_interactions) && $request->average_interactions > 0) {
+            $minInteractions = $request->average_interactions;
+
+            // Find influencers with at least this level of average interactions
+            $influencerId = Statistic::where('average_interactions', '>=', $minInteractions)
+                                      ->pluck('influencer_id')
+                                      ->toArray();
+
+            if (!empty($influencerId)) {
+                $influencers = $influencers->whereIn('id', $influencerId);
+            } else {
+                $influencers = $influencers->whereRaw('1 = 0');
+            }
             // dd($influencers->all());
             // dd(2);
         }
 
 
         if (isset($request->wilaya_audience) && is_array($request->wilaya_audience) && count($request->wilaya_audience) > 0) {
-            $s=$request->wilaya_audience;
-            // dd($request);
-                $influencerId = Statistic::whereIn('city_1',$s)
-                                        ->orWhereIn('city_2',$s)
-                                        ->orWhereIn('city_3',$s)
-                                        ->orWhereIn('city_4',$s)
-                                        ->pluck('influencer_id')->toArray();
-            //   dd($influencerId);
+            $wilayaIds = $request->wilaya_audience;
 
-            if(isset($request->wilaya_interactions_pourcentage)){
-                       $wip=$request->wilaya_interactions_pourcentage;
-                $newinfluencerId = Statistic::where(function($query) use ($wip,$s){
-                                             $query->where('nomber_followers_1','>=',$wip)
-                                            ->whereIn('city_1',$s);
-                                        })
-                                   ->orWhere(function($query) use ($wip,$s){
-                                    $query->where('nomber_followers_2','>=',$wip)
-                                   ->whereIn('city_2',$s);
-                               })
-                               ->orWhere(function($query) use ($wip,$s){
-                                $query->where('nomber_followers_3','>=',$wip)
-                               ->whereIn('city_3',$s);
-                           })
-                           ->orWhere(function($query) use ($wip,$s){
-                            $query->where('nomber_followers_4','>=',$wip)
-                           ->whereIn('city_4',$s);
-                            })
-                            ->pluck('influencer_id')->toArray();
-                $influencerId=array_intersect($influencerId,$newinfluencerId);
-                // return $influencerId;
+            // Get wilaya names from IDs
+            try {
+                $wilayaNames = Wilaya::whereIn('id', $wilayaIds)->pluck('name')->toArray();
+            } catch (\Exception $e) {
+                \Log::error('Error fetching wilaya names: ' . $e->getMessage());
+                $wilayaNames = [];
             }
-            $influencers  = $influencers->whereIn('id', $influencerId);
+
+            if (!empty($wilayaNames)) {
+                // Search statistics where any of the top 4 cities matches the selected wilayas
+                $influencerId = Statistic::where(function($query) use ($wilayaNames) {
+                    $query->whereIn('city_1', $wilayaNames)
+                          ->orWhereIn('city_2', $wilayaNames)
+                          ->orWhereIn('city_3', $wilayaNames)
+                          ->orWhereIn('city_4', $wilayaNames);
+                })
+                ->pluck('influencer_id')->toArray();
+
+                // If percentage threshold is specified, filter further
+                if (isset($request->wilaya_interactions_pourcentage)) {
+                    $threshold = $request->wilaya_interactions_pourcentage;
+
+                    $newinfluencerId = Statistic::where(function($query) use ($threshold, $wilayaNames) {
+                        $query->where(function($q) use ($threshold, $wilayaNames) {
+                            $q->where('nomber_followers_1', '>=', $threshold)
+                              ->whereIn('city_1', $wilayaNames);
+                        })
+                        ->orWhere(function($q) use ($threshold, $wilayaNames) {
+                            $q->where('nomber_followers_2', '>=', $threshold)
+                              ->whereIn('city_2', $wilayaNames);
+                        })
+                        ->orWhere(function($q) use ($threshold, $wilayaNames) {
+                            $q->where('nomber_followers_3', '>=', $threshold)
+                              ->whereIn('city_3', $wilayaNames);
+                        })
+                        ->orWhere(function($q) use ($threshold, $wilayaNames) {
+                            $q->where('nomber_followers_4', '>=', $threshold)
+                              ->whereIn('city_4', $wilayaNames);
+                        });
+                    })
+                    ->pluck('influencer_id')->toArray();
+
+                    $influencerId = array_intersect($influencerId, $newinfluencerId);
+                }
+
+                if (!empty($influencerId)) {
+                    $influencers = $influencers->whereIn('id', $influencerId);
+                } else {
+                    $influencers = $influencers->whereRaw('1 = 0');
+                }
+            }
             // dd(3);
         }
         if (isset($request->gender_audience) ) {
-            $w=$request->gender_audience;
-// return $w;
-                $w=str_replace('a','e',$w);
-                // dd($w);
-            if(isset($request->gender_audience_pourcentage)){
-                $influencerId = Statistic::whereNotNull('gender_'.$w)->Where('gender_'.$w,'>',$request->gender_audience_pourcentage)
-                ->pluck('influencer_id')->toArray();
-            }else{
-                $influencerId = Statistic::whereNotNull('gender_'.$w)->Where('gender_'.$w,'>',0)
-                ->pluck('influencer_id')->toArray();
-            }
+            $genderAudience = $request->gender_audience;
 
-            $influencers  = $influencers->whereIn('id', $influencerId);
+            // Map values: male/men -> men, female/women -> women
+            $genderFieldMap = [
+                'male' => 'men',
+                'men' => 'men',
+                'female' => 'women',
+                'women' => 'women'
+            ];
+
+            $genderField = $genderFieldMap[$genderAudience] ?? null;
+
+            if ($genderField) {
+                // Database has fields: gender_men and gender_women
+                $fieldName = 'gender_' . $genderField;
+
+                if (isset($request->gender_audience_pourcentage)) {
+                    $threshold = $request->gender_audience_pourcentage;
+                } else {
+                    // Default: at least 50% of audience should be this gender
+                    $threshold = 50;
+                }
+
+                $influencerId = Statistic::whereNotNull($fieldName)
+                                         ->where($fieldName, '>=', $threshold)
+                                         ->pluck('influencer_id')->toArray();
+
+                if (!empty($influencerId)) {
+                    $influencers = $influencers->whereIn('id', $influencerId);
+                } else {
+                    $influencers = $influencers->whereRaw('1 = 0');
+                }
+            }
             // dd(4);
         }
 
         if (isset($request->audience_age) ) {
-            $w=$request->audience_age;
+            $ageRange = $request->audience_age;
 
-            //create column query age_g_13 age_w_13 age_m_13
-             if (isset($request->gender_audience) )
-             {
-               if($request->gender_audience =="men"){
-                 $w='age_m_'.$w;
-               }
-               else{
-                 $w='age_w_'.$w;
-               }
-             }else{
-                 $w='age_g_'.$w;
-             }
-// return $audience_age_pourcentage;
-            if(isset($request->audience_age_pourcentage)){
-                $influencerId = Statistic::whereNotNull($w)
-                                         ->Where($w,'>=',$request->audience_age_pourcentage)
-                                         ->pluck('influencer_id')->toArray();
-            }else
-            {
-            $influencerId = Statistic::whereNotNull($w)->Where($w,'>=',0)
-                                      ->pluck('influencer_id')->toArray();
+            // Map age ranges to database field suffixes
+            // Database has: age_g_13, age_g_18, age_g_25, age_g_35, age_g_45, age_g_55
+            $ageFieldMap = [
+                '18-24' => '18',
+                '25-34' => '25',
+                '35-44' => '35',
+                '45+' => '45'
+            ];
+
+            // Get the field suffix from the range
+            $ageSuffix = $ageFieldMap[$ageRange] ?? null;
+
+            if ($ageSuffix) {
+                // Determine prefix based on gender audience filter
+                $prefix = 'age_g_'; // Default: general audience
+
+                if (isset($request->gender_audience)) {
+                    if ($request->gender_audience == "men" || $request->gender_audience == "male") {
+                        $prefix = 'age_m_';
+                    } elseif ($request->gender_audience == "women" || $request->gender_audience == "female") {
+                        $prefix = 'age_w_';
+                    }
+                }
+
+                $ageField = $prefix . $ageSuffix;
+
+                // Get influencers with audience in this age range
+                if (isset($request->audience_age_pourcentage)) {
+                    $influencerId = Statistic::whereNotNull($ageField)
+                                             ->where($ageField, '>=', $request->audience_age_pourcentage)
+                                             ->pluck('influencer_id')->toArray();
+                } else {
+                    // Default minimum threshold of 10% for this age group
+                    $influencerId = Statistic::whereNotNull($ageField)
+                                             ->where($ageField, '>=', 10)
+                                             ->pluck('influencer_id')->toArray();
+                }
+
+                if (!empty($influencerId)) {
+                    $influencers = $influencers->whereIn('id', $influencerId);
+                } else {
+                    $influencers = $influencers->whereRaw('1 = 0');
+                }
             }
-            $influencers  = $influencers->whereIn('id', $influencerId);
             // dd(5);
         }
 
         if (isset($request->gender_influencers)) {
-            $g=$request->gender_influencers;
-                $influencers = $influencers->where('gender', $g);
-                // dd(6);
+            $g = $request->gender_influencers;
+
+            // Map frontend values (male/female) to database values (man/woman)
+            $genderMap = [
+                'male' => 'man',
+                'female' => 'woman'
+            ];
+
+            if (isset($genderMap[$g])) {
+                $g = $genderMap[$g];
+            }
+
+            $influencers = $influencers->where('gender', $g);
+            // dd(6);
         }
         if (isset($request->lang) && is_array($request->lang) && count($request->lang) > 0) {
-            $s=$request->lang;
+            $languages = $request->lang;
 
-                $influencers=$influencers->where('languages','like','%'.$s[0].'%' );
-                foreach ($s as $statement) {
-                    $influencers=$influencers->orWhere('languages','like','%'.$statement.'%' );
+            // Use a closure to properly group the OR conditions
+            $influencers = $influencers->where(function($query) use ($languages) {
+                foreach ($languages as $language) {
+                    $query->orWhere('languages', 'like', '%' . $language . '%');
                 }
-
+            });
 
             // dd(7);
         }
 
-        if ($request->followers_min && $request->followers_max) {
-            $min_f = $request->followers_min;
-            $max_f = $request->followers_max;
-            $influencerId = SocialLink::whereBetween('followers',[$min_f,$max_f])->select('influencer_id')->get();
-            $influencers  = $influencers->whereIn('id', $influencerId);
+        if ($request->followers_min || $request->followers_max) {
+            $min_f = $request->followers_min ?? 0;
+            $max_f = $request->followers_max ?? PHP_INT_MAX;
+
+            // Search in both social_links and statistics tables
+            $influencerId1 = SocialLink::whereBetween('followers', [$min_f, $max_f])
+                                       ->pluck('influencer_id')
+                                       ->toArray();
+
+            $influencerId2 = Statistic::whereBetween('followers', [$min_f, $max_f])
+                                      ->pluck('influencer_id')
+                                      ->toArray();
+
+            // Merge and get unique IDs
+            $influencerId = array_unique(array_merge($influencerId1, $influencerId2));
+
+            if (!empty($influencerId)) {
+                $influencers = $influencers->whereIn('id', $influencerId);
+            } else {
+                $influencers = $influencers->whereRaw('1 = 0');
+            }
             // dd(8);
             // dd($request);
         }
 
         if ($request->age) {
-            // return now()->subYears($request->age);
-            $influencers  = $influencers->whereBetween('birth_day',[now()->subYears($request->age), now()->subYears($request->age-5)]);
-            // whereBetween('birth_day', [now()->subYears(5), now()])->get();
+            // Parse age range (e.g., "18-24", "25-34", "35-44", "45+")
+            $ageRange = $request->age;
+
+            if (strpos($ageRange, '-') !== false) {
+                // Range like "18-24" or "25-34"
+                list($minAge, $maxAge) = explode('-', $ageRange);
+                $minAge = (int)$minAge;
+                $maxAge = (int)$maxAge;
+
+                // Calculate birth date range (older people have earlier birth dates)
+                $maxBirthDate = now()->subYears($minAge);  // Youngest in range
+                $minBirthDate = now()->subYears($maxAge + 1);  // Oldest in range
+
+                $influencers = $influencers->whereBetween('birth_day', [$minBirthDate, $maxBirthDate]);
+            } elseif (strpos($ageRange, '+') !== false) {
+                // Range like "45+"
+                $minAge = (int)str_replace('+', '', $ageRange);
+
+                // Everyone older than minAge (born before maxBirthDate)
+                $maxBirthDate = now()->subYears($minAge);
+
+                $influencers = $influencers->where('birth_day', '<=', $maxBirthDate);
+            } else {
+                // Single age value (fallback)
+                $age = (int)$ageRange;
+                $influencers = $influencers->whereBetween('birth_day', [
+                    now()->subYears($age + 1),
+                    now()->subYears($age)
+                ]);
+            }
             // dd(9);
         }
         // return ($request);
         if ($request->category) {
-            $influencerId = InfluencerCategory::whereIn('category_id', $request->category)->select('influencer_id')->get();
-            $influencers  = $influencers->whereIn('id', $influencerId);
+            $influencerId = InfluencerCategory::whereIn('category_id', $request->category)
+                                              ->pluck('influencer_id')
+                                              ->toArray();
+            if (!empty($influencerId)) {
+                $influencers = $influencers->whereIn('id', $influencerId);
+            } else {
+                $influencers = $influencers->whereRaw('1 = 0');
+            }
             // dd(10);
         }
 
         if ($request->categoryId) {
-            $influencerId = InfluencerCategory::where('category_id', $request->categoryId)->select('influencer_id')->get();
-            $influencers  = $influencers->whereIn('id', $influencerId);
+            $influencerId = InfluencerCategory::where('category_id', $request->categoryId)
+                                              ->pluck('influencer_id')
+                                              ->toArray();
+            if (!empty($influencerId)) {
+                $influencers = $influencers->whereIn('id', $influencerId);
+            } else {
+                $influencers = $influencers->whereRaw('1 = 0');
+            }
             // dd(11);
         }
 
@@ -875,14 +1083,17 @@ class SiteController extends Controller {
 
         if (isset($request->gender)) {
             $g=$request->gender;
-            // if($g != 'all')
-            // {
-                $influencers = $influencers->where('gender', $g);
-           //     }
+            // Map frontend values (male/female) to database values (man/woman)
+            $genderMap = [
+                'male' => 'man',
+                'female' => 'woman'
+            ];
 
-            //     else{
-           //         $influencers = $influencers->whereIn('gender', ['man','woman']);
-            //     }
+            if (isset($genderMap[$g])) {
+                $g = $genderMap[$g];
+            }
+
+            $influencers = $influencers->where('gender', $g);
             // dd(15);
         }
 
@@ -891,9 +1102,26 @@ class SiteController extends Controller {
             $influencers = $influencers->where('completed_order', '>', $request->completedJob)->orderBy('completed_order', 'desc');
         }
 
-        // Eager load relationships and paginate
-        $result = $influencers->with(['socialLink', 'categories'])
-                              ->orderBy('completed_order', 'desc')
+        // Apply sorting before pagination
+        if ($request->sort == 'rating') {
+            $influencers = $influencers->orderBy('rating', 'desc')->orderBy('total_review', 'desc');
+        } elseif ($request->sort == 'popular') {
+            $influencers = $influencers->orderBy('completed_order', 'desc')->orderBy('rating', 'desc');
+        } elseif ($request->sort == 'latest') {
+            $influencers = $influencers->orderBy('created_at', 'desc');
+        } else {
+            // Default sorting
+            $influencers = $influencers->orderBy('created_at', 'desc');
+        }
+
+        // Eager load all necessary relationships and paginate
+        $result = $influencers->with([
+                                    'socialLink',           // Social media links
+                                    'categories',           // Influencer categories
+                                    'statistics',           // Follower stats, engagement data
+                                    'services'              // Services offered
+                                ])
+                              ->withCount('reviews')  // Count of reviews as reviews_count
                               ->paginate(getPaginate(20));
 
         // Get favorites for the current user

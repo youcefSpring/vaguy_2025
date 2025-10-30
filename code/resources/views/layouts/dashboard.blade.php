@@ -433,7 +433,11 @@
                                      class="absolute right-0 mt-2 w-40 rounded-lg shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-50"
                                      style="display: none;">
                                     <div class="py-1">
-                                        @foreach ($language as $item)
+                                        @php
+                                            // Filter to only show valid language codes
+                                            $validLanguages = $language->whereIn('code', ['en', 'fr', 'ar']);
+                                        @endphp
+                                        @foreach ($validLanguages as $item)
                                             <a href="{{ route('lang', $item->code) }}"
                                                class="flex items-center px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 {{ session('lang') == $item->code ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-gray-300' }}">
                                                 <span class="text-xl mr-2">{{ $flags[$item->code] ?? '🌐' }}</span>

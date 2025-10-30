@@ -12,11 +12,11 @@
     <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
         <!-- Search bar -->
         <form class="relative flex flex-1" action="#" method="GET">
-            <label for="search-field" class="sr-only">Rechercher</label>
+            <label for="search-field" class="sr-only">@lang('common.search')</label>
             <i data-lucide="search" class="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400 pl-3 flex items-center"></i>
             <input id="search-field"
                    class="block h-full w-full border-0 py-0 pl-10 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm bg-transparent"
-                   placeholder="Rechercher..."
+                   placeholder="@lang('common.search')..."
                    type="search"
                    name="search">
         </form>
@@ -39,7 +39,7 @@
             <!-- Notifications dropdown -->
             <div x-ref="notificationDropdown" class="hidden absolute right-0 top-16 z-10 mt-2 w-80 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div class="px-4 py-2 border-b border-gray-200">
-                    <h3 class="text-sm font-medium text-gray-900">Notifications</h3>
+                    <h3 class="text-sm font-medium text-gray-900">@lang('common.notifications')</h3>
                 </div>
                 <div class="max-h-64 overflow-y-auto">
                     @forelse((auth()->user()->notifications ?? collect())->take(5) as $notification)
@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="ml-3 flex-1">
                                     <p class="text-sm font-medium text-gray-900">
-                                        {{ $notification->data['title'] ?? 'Notification' }}
+                                        {{ $notification->data['title'] ?? __('common.notification') }}
                                     </p>
                                     <p class="text-sm text-gray-500 truncate">
                                         {{ $notification->data['message'] ?? '' }}
@@ -64,14 +64,14 @@
                     @empty
                         <div class="px-4 py-8 text-center">
                             <i data-lucide="bell" class="mx-auto h-8 w-8 text-gray-400"></i>
-                            <p class="mt-2 text-sm text-gray-500">Aucune notification</p>
+                            <p class="mt-2 text-sm text-gray-500">@lang('common.no_notifications')</p>
                         </div>
                     @endforelse
                 </div>
                 @if((auth()->user()->notifications ?? collect())->count() > 0)
                     <div class="border-t border-gray-200 px-4 py-2">
                         <a href="{{ localized_route('user.home') }}" class="text-sm text-blue-600 hover:text-blue-800">
-                            عرض جميع الإشعارات
+                            @lang('common.view_all_notifications')
                         </a>
                     </div>
                 @endif
@@ -191,7 +191,7 @@
                     <form action="{{ localized_route('user.logout') }}" method="GET">
                         <button type="submit" class="flex w-full items-center gap-x-3 px-3 py-2 text-sm leading-6 text-gray-900 hover:bg-gray-50">
                             <i data-lucide="log-out" class="h-4 w-4 text-gray-400"></i>
-                            Déconnexion
+                            @lang('common.logout')
                         </button>
                     </form>
                 </div>

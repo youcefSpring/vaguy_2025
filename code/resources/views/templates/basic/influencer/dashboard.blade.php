@@ -5,10 +5,10 @@
     <!-- Welcome Header -->
     <div>
         <h1 class="text-2xl font-bold tracking-tight text-gray-900">
-            Bienvenue, {{ authInfluencer()->fullname }}!
+            @lang('dashboard.welcome_message', ['name' => authInfluencer()->fullname])
         </h1>
         <p class="text-gray-600">
-            Voici un aperçu de votre activité sur la plateforme.
+            @lang('dashboard.platform_activity_overview')
         </p>
     </div>
 
@@ -26,7 +26,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">
-                                Solde actuel
+                                @lang('dashboard.current_balance')
                             </dt>
                             <dd class="text-lg font-medium text-gray-900">
                                 {{ number_format($data['current_balance'], 2) }} DZD
@@ -49,7 +49,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">
-                                Montant total du retrait
+                                @lang('dashboard.total_withdrawals')
                             </dt>
                             <dd class="text-lg font-medium text-gray-900">
                                 {{ number_format($data['withdraw_balance'], 2) }} DZD
@@ -72,7 +72,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">
-                                Total des transactions
+                                @lang('dashboard.total_transactions')
                             </dt>
                             <dd class="text-lg font-medium text-gray-900">
                                 {{ $data['total_transaction'] }}
@@ -95,7 +95,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">
-                                Total des emplois
+                                @lang('dashboard.total_jobs')
                             </dt>
                             <dd class="text-lg font-medium text-gray-900">
                                 {{ $data['total_hiring'] }}
@@ -118,7 +118,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">
-                                Total des offres
+                                @lang('dashboard.total_offers')
                             </dt>
                             <dd class="text-lg font-medium text-gray-900">
                                 {{ $data['total_order'] }}
@@ -141,7 +141,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">
-                                Total des services
+                                @lang('dashboard.total_services')
                             </dt>
                             <dd class="text-lg font-medium text-gray-900">
                                 {{ $data['total_service'] }}
@@ -158,9 +158,9 @@
         <!-- Orders Chart -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Répartition des Commandes</h3>
+                <h3 class="card-title">@lang('dashboard.orders_distribution')</h3>
                 <p class="card-description">
-                    Statut de vos commandes de services
+                    @lang('dashboard.service_orders_status')
                 </p>
             </div>
             <div class="card-content">
@@ -169,7 +169,7 @@
                     <div id="ordersChartEmpty" class="hidden absolute inset-0 flex items-center justify-center">
                         <div class="text-center">
                             <i data-lucide="inbox" class="h-12 w-12 mx-auto text-gray-400 mb-2"></i>
-                            <p class="text-sm text-gray-500">Aucune commande pour le moment</p>
+                            <p class="text-sm text-gray-500">@lang('dashboard.no_orders_yet')</p>
                         </div>
                     </div>
                 </div>
@@ -179,9 +179,9 @@
         <!-- Hiring Chart -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Répartition des Emplois</h3>
+                <h3 class="card-title">@lang('dashboard.jobs_distribution')</h3>
                 <p class="card-description">
-                    Statut de vos projets de recrutement
+                    @lang('dashboard.recruitment_projects_status')
                 </p>
             </div>
             <div class="card-content">
@@ -190,7 +190,7 @@
                     <div id="hiringChartEmpty" class="hidden absolute inset-0 flex items-center justify-center">
                         <div class="text-center">
                             <i data-lucide="inbox" class="h-12 w-12 mx-auto text-gray-400 mb-2"></i>
-                            <p class="text-sm text-gray-500">Aucun emploi pour le moment</p>
+                            <p class="text-sm text-gray-500">@lang('dashboard.no_jobs_yet')</p>
                         </div>
                     </div>
                 </div>
@@ -201,9 +201,9 @@
     <!-- Quick Actions -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Actions Rapides</h3>
+            <h3 class="card-title">@lang('dashboard.quick_actions')</h3>
             <p class="card-description">
-                Gérez rapidement vos services et commandes
+                @lang('dashboard.manage_services_quickly')
             </p>
         </div>
         <div class="card-content">
@@ -211,22 +211,22 @@
                 <a href="{{ localized_route('influencer.service.create') }}"
                    class="btn btn-primary btn-default w-full">
                     <i data-lucide="plus" class="mr-2 h-4 w-4"></i>
-                    Créer un Service
+                    @lang('dashboard.create_service')
                 </a>
                 <a href="{{ localized_route('influencer.service.order.index') }}"
                    class="btn btn-secondary btn-default w-full">
                     <i data-lucide="list" class="mr-2 h-4 w-4"></i>
-                    Voir les Commandes
+                    @lang('dashboard.view_orders')
                 </a>
                 <a href="{{ localized_route('influencer.campain.index') }}"
                    class="btn btn-outline btn-default w-full">
                     <i data-lucide="megaphone" class="mr-2 h-4 w-4"></i>
-                    Gérer les Campagnes
+                    @lang('dashboard.manage_campaigns')
                 </a>
                 <a href="{{ localized_route('influencer.withdraw') }}"
                    class="btn btn-ghost btn-default w-full">
                     <i data-lucide="banknote" class="mr-2 h-4 w-4"></i>
-                    Demander un Retrait
+                    @lang('dashboard.request_withdrawal')
                 </a>
             </div>
         </div>
@@ -289,13 +289,13 @@ document.addEventListener('DOMContentLoaded', function() {
         type: 'doughnut',
         data: {
             labels: [
-                'En attente',
-                'Terminées',
-                'En cours',
-                'Annulées',
-                'Travail terminé',
-                'Signalées',
-                'Rejetées'
+                '@lang('dashboard.status_pending')',
+                '@lang('dashboard.status_completed')',
+                '@lang('dashboard.status_in_progress')',
+                '@lang('dashboard.status_cancelled')',
+                '@lang('dashboard.status_job_done')',
+                '@lang('dashboard.status_reported')',
+                '@lang('dashboard.status_rejected')'
             ],
             datasets: [{
                 data: ordersData,
@@ -356,13 +356,13 @@ document.addEventListener('DOMContentLoaded', function() {
         type: 'doughnut',
         data: {
             labels: [
-                'En attente',
-                'Terminés',
-                'En cours',
-                'Annulés',
-                'Travail terminé',
-                'Signalés',
-                'Rejetés'
+                '@lang('dashboard.status_pending')',
+                '@lang('dashboard.status_completed')',
+                '@lang('dashboard.status_in_progress')',
+                '@lang('dashboard.status_cancelled')',
+                '@lang('dashboard.status_job_done')',
+                '@lang('dashboard.status_reported')',
+                '@lang('dashboard.status_rejected')'
             ],
             datasets: [{
                 data: hiringData,

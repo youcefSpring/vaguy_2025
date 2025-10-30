@@ -60,6 +60,13 @@ return [
     'no' => 'لا',
     'share' => 'مشاركة',
     'provided_by' => 'مقدم من',
+    'logout' => 'تسجيل الخروج',
+
+    // Notifications
+    'notifications' => 'الإشعارات',
+    'notification' => 'إشعار',
+    'no_notifications' => 'لا توجد إشعارات',
+    'view_all_notifications' => 'عرض جميع الإشعارات',
 
     // Navigation links
     'dashboard' => 'لوحة التحكم',

@@ -3,8 +3,8 @@
 
 <div class="bg-white shadow rounded-lg">
     <div class="px-6 py-4 border-b border-gray-200">
-        <h3 class="text-lg font-medium text-gray-900">@lang('تاريخ التوظيفات')</h3>
-        <p class="mt-1 text-sm text-gray-600">@lang('إدارة تاريخ عروض العمل ومتابعة حالتها')</p>
+        <h3 class="text-lg font-medium text-gray-900">@lang('hiring.hiring_history')</h3>
+        <p class="mt-1 text-sm text-gray-600">@lang('hiring.manage_hiring_history')</p>
     </div>
 
     <div class="p-6">
@@ -15,7 +15,7 @@
                     <input type="text"
                            name="search"
                            value="{{ request()->search }}"
-                           placeholder="@lang('رقم عرض العمل / المؤثر')"
+                           placeholder="@lang('hiring.search_placeholder')"
                            class="block w-80 rounded-r-none border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-blue-500">
                     <button type="submit"
                             class="inline-flex items-center px-4 py-2 border border-l-0 border-gray-300 bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-l-none">
@@ -30,11 +30,11 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">@lang('رقم عرض العمل')</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">@lang('المؤثر')</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">@lang('المبلغ | التوصيل')</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">@lang('الحالة')</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">@lang('النشاط')</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">@lang('hiring.job_offer_number')</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">@lang('hiring.influencer')</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">@lang('hiring.amount_delivery')</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">@lang('hiring.status')</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">@lang('hiring.actions')</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -55,7 +55,7 @@
                             <div class="text-sm">
                                 <div class="font-medium text-gray-900">{{ __($general->cur_sym) }}{{ showAmount($hiring->amount) }}</div>
                                 <div class="text-gray-500">
-                                    @lang('التوصيل'): {{ $hiring->delivery_date }}
+                                    @lang('hiring.delivery'): {{ $hiring->delivery_date }}
                                 </div>
                             </div>
                         </td>
@@ -68,26 +68,26 @@
                                     <a href="{{ localized_route('user.review.influencer', $hiring->id) }}"
                                        class="inline-flex items-center px-3 py-2 border border-yellow-300 shadow-sm text-sm leading-4 font-medium rounded-md text-yellow-700 bg-white hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                         <i data-lucide="star" class="h-4 w-4 ml-2"></i>
-                                        @lang('الآراء')
+                                        @lang('hiring.reviews')
                                     </a>
                                 @else
                                     <span class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-100 cursor-not-allowed"
-                                          title="@lang('You can review it after the hiring is completed.')">
+                                          title="@lang('hiring.review_after_completion')">
                                         <i data-lucide="star" class="h-4 w-4 ml-2"></i>
-                                        @lang('الآراء')
+                                        @lang('hiring.reviews')
                                     </span>
                                 @endif
 
                                 <a href="{{ localized_route('user.hiring.detail',$hiring->id) }}"
                                    class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     <i data-lucide="eye" class="h-4 w-4 ml-2"></i>
-                                    @lang('التفاصيل')
+                                    @lang('hiring.details')
                                 </a>
 
                                 <a href="{{ localized_route('user.hiring.conversation.view',$hiring->id) }}"
                                    class="inline-flex items-center px-3 py-2 border border-blue-300 shadow-sm text-sm leading-4 font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     <i data-lucide="message-circle" class="h-4 w-4 ml-2"></i>
-                                    @lang('الدردشة')
+                                    @lang('hiring.chat')
                                 </a>
                             </div>
                         </td>
@@ -96,8 +96,8 @@
                     <tr>
                         <td colspan="5" class="px-6 py-12 text-center">
                             <i data-lucide="briefcase" class="h-12 w-12 text-gray-400 mx-auto mb-4"></i>
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">@lang('لا توجد توظيفات')</h3>
-                            <p class="text-gray-500">{{ __($emptyMessage) }}</p>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">@lang('hiring.no_hirings')</h3>
+                            <p class="text-gray-500">{{ $emptyMessage ?? __('hiring.no_hirings_message') }}</p>
                         </td>
                     </tr>
                     @endforelse

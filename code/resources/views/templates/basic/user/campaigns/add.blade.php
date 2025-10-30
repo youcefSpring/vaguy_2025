@@ -3,11 +3,11 @@
 
 <div class="bg-white shadow rounded-lg">
     <div class="px-6 py-4 border-b border-gray-200">
-        <h3 class="text-lg font-medium text-gray-900">{{ __('Add Campaign') }}</h3>
+        <h3 class="text-lg font-medium text-gray-900">@lang('campaigns.add_campaign')</h3>
     </div>
 
     <div class="p-6">
-        <p class="text-gray-600 mb-4">{{ __('Create a new campaign to work with influencers.') }}</p>
+        <p class="text-gray-600 mb-4">@lang('campaigns.create_campaign_description')</p>
 
         <!-- Show preselected influencer info if available -->
         @if(isset($preselectedInfluencer))
@@ -19,8 +19,8 @@
                          class="w-12 h-12 rounded-full object-cover border-2 border-blue-300">
                 </div>
                 <div class="flex-1">
-                    <h4 class="text-lg font-semibold text-blue-900">@lang('المؤثر المحدد'): {{ $preselectedInfluencer['name'] }}</h4>
-                    <p class="text-sm text-blue-700">@lang('سيتم إنشاء الحملة مع هذا المؤثر')</p>
+                    <h4 class="text-lg font-semibold text-blue-900">@lang('campaigns.selected_influencer'): {{ $preselectedInfluencer['name'] }}</h4>
+                    <p class="text-sm text-blue-700">@lang('campaigns.campaign_with_influencer')</p>
                 </div>
                 <div class="flex-shrink-0">
                     <i data-lucide="check-circle" class="h-6 w-6 text-green-500"></i>
@@ -63,7 +63,7 @@ const CampaignWizard = {
         <div class="bg-white">
             <!-- Header -->
             <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                <h3 class="text-lg font-medium text-gray-900">@lang('إنشاء حملة جديدة')</h3>
+                <h3 class="text-lg font-medium text-gray-900">@lang('campaigns.create_new_campaign')</h3>
                 <button @click="$emit('close')" class="text-gray-400 hover:text-gray-600">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
@@ -72,7 +72,7 @@ const CampaignWizard = {
             <!-- Progress Steps -->
             <div class="px-6 py-4 bg-gray-50">
                 <div class="flex items-center justify-between mb-4">
-                    <h4 class="text-sm font-medium text-gray-900">@lang('تقدم الخطوات')</h4>
+                    <h4 class="text-sm font-medium text-gray-900">@lang('campaigns.step_progress')</h4>
                     <span class="text-sm text-gray-500">@{{ currentStep }}/5</span>
                 </div>
 
@@ -95,7 +95,7 @@ const CampaignWizard = {
                             @{{ step }}
                         </button>
                         <span class="text-xs text-gray-600 mt-1 text-center">
-                            @lang('الخطوة') @{{ step }}
+                            @lang('campaigns.step') @{{ step }}
                         </span>
                     </div>
                 </div>
@@ -105,12 +105,12 @@ const CampaignWizard = {
             <div class="px-6 py-6 max-h-[70vh] overflow-y-auto">
                 <!-- Step 1: Company Information -->
                 <div v-if="currentStep === 1" class="space-y-6">
-                    <h4 class="text-lg font-semibold text-gray-900">@lang('معلومات الشركة')</h4>
+                    <h4 class="text-lg font-semibold text-gray-900">@lang('campaigns.company_information')</h4>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                @lang('شعار العلامة التجارية') <span class="text-red-500">*</span>
+                                @lang('campaigns.brand_logo') <span class="text-red-500">*</span>
                             </label>
                             <input type="file"
                                    @change="handleFileUpload($event, 'company_logo')"
@@ -121,35 +121,35 @@ const CampaignWizard = {
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                @lang('اسم الشركة') <span class="text-red-500">*</span>
+                                @lang('campaigns.company_name') <span class="text-red-500">*</span>
                             </label>
                             <input type="text"
                                    v-model="form.company_name"
                                    class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                   :placeholder="'@lang('أدخل اسم الشركة')'">
+                                   :placeholder="'@lang('campaigns.enter_company_name')'">
                             <span v-if="errors.company_name" class="text-red-500 text-sm">@{{ errors.company_name }}</span>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            @lang('وصف الشركة') <span class="text-red-500">*</span>
+                            @lang('campaigns.company_description') <span class="text-red-500">*</span>
                         </label>
                         <textarea v-model="form.company_desc"
                                  rows="4"
                                  class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                 :placeholder="'@lang('وصف مختصر عن شركتك وأنشطتها')'"></textarea>
+                                 :placeholder="'@lang('campaigns.company_description_placeholder')'"></textarea>
                         <span v-if="errors.company_desc" class="text-red-500 text-sm">@{{ errors.company_desc }}</span>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                @lang('الفئة الرئيسية') <span class="text-red-500">*</span>
+                                @lang('campaigns.main_category') <span class="text-red-500">*</span>
                             </label>
                             <select v-model="form.company_principal_category"
                                     class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">@lang('أختر التصنيف الرئيسي')</option>
+                                <option value="">@lang('campaigns.select_main_category')</option>
                                 <option v-for="category in categories" :key="category.id" :value="category.id">
                                     @{{ category.name }}
                                 </option>
@@ -159,7 +159,7 @@ const CampaignWizard = {
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                @lang('رابط موقع الشركة')
+                                @lang('campaigns.company_website')
                             </label>
                             <input type="url"
                                    v-model="form.company_web_url"
@@ -172,45 +172,45 @@ const CampaignWizard = {
 
                 <!-- Step 2: Campaign Details -->
                 <div v-if="currentStep === 2" class="space-y-6">
-                    <h4 class="text-lg font-semibold text-gray-900">@lang('تفاصيل الحملة')</h4>
+                    <h4 class="text-lg font-semibold text-gray-900">@lang('campaigns.campaign_details')</h4>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            @lang('اسم الحملة') <span class="text-red-500">*</span>
+                            @lang('campaigns.campaign_name') <span class="text-red-500">*</span>
                         </label>
                         <input type="text"
                                v-model="form.campain_name"
                                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                               :placeholder="'@lang('أدخل اسم الحملة')'">
+                               :placeholder="'@lang('campaigns.enter_campaign_name')'">
                         <span v-if="errors.campain_name" class="text-red-500 text-sm">@{{ errors.campain_name }}</span>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            @lang('هدف الحملة') <span class="text-red-500">*</span>
+                            @lang('campaigns.campaign_objective') <span class="text-red-500">*</span>
                         </label>
                         <input type="text"
                                v-model="form.campain_objective"
                                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                               :placeholder="'@lang('هدف الحملة الإعلانية')'">
+                               :placeholder="'@lang('campaigns.campaign_objective_placeholder')'">
                         <span v-if="errors.campain_objective" class="text-red-500 text-sm">@{{ errors.campain_objective }}</span>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            @lang('تفاصيل الحملة') <span class="text-red-500">*</span>
+                            @lang('campaigns.campaign_details') <span class="text-red-500">*</span>
                         </label>
                         <textarea v-model="form.campain_details"
                                  rows="4"
                                  class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                 :placeholder="'@lang('تفاصيل مفصلة عن الحملة')'"></textarea>
+                                 :placeholder="'@lang('campaigns.detailed_campaign_info')'"></textarea>
                         <span v-if="errors.campain_details" class="text-red-500 text-sm">@{{ errors.campain_details }}</span>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                @lang('تاريخ البداية') <span class="text-red-500">*</span>
+                                @lang('campaigns.start_date') <span class="text-red-500">*</span>
                             </label>
                             <input type="date"
                                    v-model="form.campain_start_date"
@@ -221,7 +221,7 @@ const CampaignWizard = {
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                @lang('تاريخ النهاية') <span class="text-red-500">*</span>
+                                @lang('campaigns.end_date') <span class="text-red-500">*</span>
                             </label>
                             <input type="date"
                                    v-model="form.campain_end_date"
@@ -234,7 +234,7 @@ const CampaignWizard = {
 
                 <!-- Steps 3, 4, 5 would be added here -->
                 <div v-if="currentStep > 2" class="text-center py-8">
-                    <p class="text-gray-500">@lang('الخطوات الإضافية قيد التطوير')</p>
+                    <p class="text-gray-500">@lang('campaigns.additional_steps_development')</p>
                 </div>
             </div>
 
@@ -244,7 +244,7 @@ const CampaignWizard = {
                         @click="previousStep"
                         class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
                     <i data-lucide="chevron-left" class="w-4 h-4 mr-2"></i>
-                    @lang('السابق')
+                    @lang('campaigns.previous')
                 </button>
                 <div v-else></div>
 

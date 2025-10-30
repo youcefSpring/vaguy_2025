@@ -60,6 +60,13 @@ return [
     'no' => 'No',
     'share' => 'Share',
     'provided_by' => 'Provided by',
+    'logout' => 'Logout',
+
+    // Notifications
+    'notifications' => 'Notifications',
+    'notification' => 'Notification',
+    'no_notifications' => 'No notifications',
+    'view_all_notifications' => 'View all notifications',
 
     // Navigation links
     'dashboard' => 'Dashboard',

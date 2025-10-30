@@ -69,10 +69,10 @@ const CampaignManager = {
                                     </div>
                                     <div class="min-w-0 flex-1">
                                         <h4 class="text-sm font-medium text-gray-900 truncate">
-                                            @{{ campaign?.campain_name || 'حملة #' + (campaign?.id || 'غير محدد') }}
+                                            @{{ campaign?.campain_name || (texts.campaignNumber || '') + (campaign?.id || '') }}
                                         </h4>
                                         <p class="text-sm text-gray-500 mt-1 line-clamp-2">
-                                            @{{ campaign?.campain_objective || 'لا يوجد هدف محدد' }}
+                                            @{{ campaign?.campain_objective || texts.noObjective }}
                                         </p>
                                     </div>
                                 </div>
@@ -113,15 +113,17 @@ const CampaignManager = {
         const createCampaignUrl = '/' + locale + '/client/add-campaign';
 
         const texts = {
-            manageTitle: @json(__('إدارة الحملات')),
-            manageSubtitle: @json(__('إنشاء وإدارة حملاتك الإعلانية')),
-            createNew: @json(__('إنشاء حملة جديدة')),
-            loading: @json(__('جاري التحميل...')),
-            noCampaigns: @json(__('لا توجد حملات')),
-            noCampaignsDesc: @json(__('لم تقم بإنشاء أي حملات إعلانية بعد. ابدأ بإنشاء حملتك الأولى الآن!')),
-            createdDate: @json(__('تاريخ الإنشاء')),
-            view: @json(__('عرض')),
-            edit: @json(__('تعديل'))
+            manageTitle: @json(__('campaigns.manage_campaigns')),
+            manageSubtitle: @json(__('campaigns.manage_campaigns_subtitle')),
+            createNew: @json(__('campaigns.create_new')),
+            loading: @json(__('campaigns.loading')),
+            noCampaigns: @json(__('campaigns.no_campaigns')),
+            noCampaignsDesc: @json(__('campaigns.no_campaigns_desc')),
+            createdDate: @json(__('campaigns.created_date')),
+            view: @json(__('campaigns.view')),
+            edit: @json(__('campaigns.edit')),
+            campaignNumber: @json(__('campaigns.campaign_number')),
+            noObjective: @json(__('campaigns.no_objective'))
         };
 
         const formatDate = (dateString) => {

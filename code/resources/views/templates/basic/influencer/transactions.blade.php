@@ -6,7 +6,7 @@
     <div class="flex justify-between items-center">
         <div>
             <h1 class="text-2xl font-bold tracking-tight text-gray-900">{{ $pageTitle }}</h1>
-            <p class="text-gray-600">Historique de toutes vos transactions</p>
+            <p class="text-gray-600">@lang('transactions.transaction_history')</p>
         </div>
     </div>
 
@@ -17,7 +17,7 @@
                 <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <i data-lucide="wallet" class="h-6 w-6 text-green-600"></i>
                 </div>
-                <h3 class="font-medium text-gray-900 mb-1">Solde actuel</h3>
+                <h3 class="font-medium text-gray-900 mb-1">@lang('transactions.current_balance')</h3>
                 <p class="text-2xl font-bold text-green-600">{{ showAmount(authInfluencer()->balance) }} {{ $general->cur_text ?? '' }}</p>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <i data-lucide="trending-up" class="h-6 w-6 text-blue-600"></i>
                 </div>
-                <h3 class="font-medium text-gray-900 mb-1">Total reçu</h3>
+                <h3 class="font-medium text-gray-900 mb-1">@lang('transactions.total_received')</h3>
                 <p class="text-2xl font-bold text-blue-600">
                     {{ showAmount($transactions->where('trx_type', '+')->sum('amount')) }} {{ $general->cur_text ?? '' }}
                 </p>
@@ -39,7 +39,7 @@
                 <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <i data-lucide="trending-down" class="h-6 w-6 text-red-600"></i>
                 </div>
-                <h3 class="font-medium text-gray-900 mb-1">Total dépensé</h3>
+                <h3 class="font-medium text-gray-900 mb-1">@lang('transactions.total_spent')</h3>
                 <p class="text-2xl font-bold text-red-600">
                     {{ showAmount($transactions->where('trx_type', '-')->sum('amount')) }} {{ $general->cur_text ?? '' }}
                 </p>
@@ -51,7 +51,7 @@
                 <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <i data-lucide="list" class="h-6 w-6 text-purple-600"></i>
                 </div>
-                <h3 class="font-medium text-gray-900 mb-1">Transactions</h3>
+                <h3 class="font-medium text-gray-900 mb-1">@lang('transactions.transactions')</h3>
                 <p class="text-2xl font-bold text-purple-600">{{ $transactions->total() }}</p>
             </div>
         </div>
@@ -60,42 +60,42 @@
     <!-- Filters -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Filtres</h3>
+            <h3 class="card-title">@lang('transactions.filters')</h3>
         </div>
         <div class="card-content">
             <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <!-- Search by Transaction ID -->
                 <div>
                     <label for="search" class="block text-sm font-medium text-gray-700 mb-2">
-                        Rechercher par transaction
+                        @lang('transactions.search_by_transaction')
                     </label>
                     <input type="text"
                            name="search"
                            id="search"
                            value="{{ request('search') }}"
-                           placeholder="ID de transaction..."
+                           placeholder="@lang('transactions.transaction_id_placeholder')"
                            class="input w-full">
                 </div>
 
                 <!-- Transaction Type -->
                 <div>
                     <label for="type" class="block text-sm font-medium text-gray-700 mb-2">
-                        Type de transaction
+                        @lang('transactions.transaction_type')
                     </label>
                     <select name="type" id="type" class="input w-full">
-                        <option value="">Tous les types</option>
-                        <option value="+" {{ request('type') == '+' ? 'selected' : '' }}>Crédit (+)</option>
-                        <option value="-" {{ request('type') == '-' ? 'selected' : '' }}>Débit (-)</option>
+                        <option value="">@lang('transactions.all_types')</option>
+                        <option value="+" {{ request('type') == '+' ? 'selected' : '' }}>@lang('transactions.credit')</option>
+                        <option value="-" {{ request('type') == '-' ? 'selected' : '' }}>@lang('transactions.debit')</option>
                     </select>
                 </div>
 
                 <!-- Remark -->
                 <div>
                     <label for="remark" class="block text-sm font-medium text-gray-700 mb-2">
-                        Catégorie
+                        @lang('transactions.category')
                     </label>
                     <select name="remark" id="remark" class="input w-full">
-                        <option value="">Toutes les catégories</option>
+                        <option value="">@lang('transactions.all_categories')</option>
                         @foreach($remarks as $remarkItem)
                             <option value="{{ $remarkItem->remark }}" {{ request('remark') == $remarkItem->remark ? 'selected' : '' }}>
                                 {{ ucfirst(str_replace('_', ' ', $remarkItem->remark)) }}
@@ -108,12 +108,12 @@
                 <div class="flex items-end gap-2">
                     <button type="submit" class="btn btn-primary flex-1">
                         <i data-lucide="search" class="mr-2 h-4 w-4"></i>
-                        Filtrer
+                        @lang('transactions.filter_button')
                     </button>
                     @if(request()->hasAny(['search', 'type', 'remark']))
                         <a href="{{ localized_route('influencer.transactions') }}" class="btn btn-ghost">
                             <i data-lucide="x" class="mr-2 h-4 w-4"></i>
-                            Reset
+                            @lang('transactions.reset_button')
                         </a>
                     @endif
                 </div>
@@ -130,22 +130,22 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Transaction
+                                    @lang('transactions.transaction_column')
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Montant
+                                    @lang('transactions.amount_column')
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Catégorie
+                                    @lang('transactions.category_column')
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Date
+                                    @lang('transactions.date_column')
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Solde après
+                                    @lang('transactions.balance_after')
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Détails
+                                    @lang('transactions.details_column')
                                 </th>
                             </tr>
                         </thead>
@@ -160,7 +160,7 @@
                                         <div>
                                             <div class="text-sm font-medium text-gray-900 font-mono">{{ $transaction->trx }}</div>
                                             @if($transaction->charge > 0)
-                                            <div class="text-xs text-gray-500">Frais: {{ showAmount($transaction->charge) }} {{ $general->cur_text ?? '' }}</div>
+                                            <div class="text-xs text-gray-500">@lang('transactions.fees'): {{ showAmount($transaction->charge) }} {{ $general->cur_text ?? '' }}</div>
                                             @endif
                                         </div>
                                     </div>
@@ -219,18 +219,18 @@
             @else
                 <div class="text-center py-12">
                     <i data-lucide="receipt" class="h-12 w-12 text-gray-400 mx-auto mb-4"></i>
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">Aucune transaction trouvée</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">@lang('transactions.no_transactions_found')</h3>
                     <p class="text-gray-600 mb-4">
                         @if(request()->hasAny(['search', 'type', 'remark']))
-                            Aucune transaction ne correspond à vos filtres.
+                            @lang('transactions.no_transactions_match_filters')
                         @else
-                            Vous n'avez pas encore de transactions.
+                            @lang('transactions.no_transactions_yet')
                         @endif
                     </p>
                     @if(request()->hasAny(['search', 'type', 'remark']))
                         <a href="{{ localized_route('influencer.transactions') }}" class="btn btn-primary">
                             <i data-lucide="x" class="mr-2 h-4 w-4"></i>
-                            Effacer les filtres
+                            @lang('transactions.clear_filters')
                         </a>
                     @endif
                 </div>
