@@ -30,14 +30,23 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
+            // Core Laravel web middleware
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
-            // \Illuminate\Session\Middleware\AuthenticateSession::class,
+
+            // 🌐 Mcamara Localization middleware
+            \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
+            \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
+            \Mcamara\LaravelLocalization\Middleware\LocaleViewPath::class,
+
+            // Laravel session & CSRF
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\CheckSupportedLocale::class, // Check for unsupported locales first
+
+            // 🧩 Your custom middleware
+            \App\Http\Middleware\CheckSupportedLocale::class,
             \App\Http\Middleware\LanguageMiddleware::class,
             \App\Http\Middleware\LastUserActivity::class,
             \App\Http\Middleware\LastInfluencerActivity::class,
@@ -69,9 +78,15 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
+        // 👑 Admin & Influencer Custom Middlewares
         'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
         'admin.guest' => \App\Http\Middleware\RedirectIfAdmin::class,
+        'influencer' => \App\Http\Middleware\RedirectIfNotInfluencer::class,
+        'influencer.check' => \App\Http\Middleware\InfluencerCheck::class,
+        'influencer.registration.complete' => \App\Http\Middleware\InfluencerRegistrationStep::class,
+        'influencer.guest' => \App\Http\Middleware\RedirectIfInfluencer::class,
 
+        // ⚙️ App Functionality
         'registration.status' => \App\Http\Middleware\AllowRegistration::class,
         'check.status' => \App\Http\Middleware\CheckStatus::class,
         'demo' => \App\Http\Middleware\Demo::class,
@@ -80,16 +95,13 @@ class Kernel extends HttpKernel
         'registration.complete' => \App\Http\Middleware\RegistrationStep::class,
         'maintenance' => \App\Http\Middleware\MaintenanceMode::class,
 
-        'influencer' => \App\Http\Middleware\RedirectIfNotInfluencer::class,
-        'influencer.check' => \App\Http\Middleware\InfluencerCheck::class,
-        'influencer.registration.complete' => \App\Http\Middleware\InfluencerRegistrationStep::class,
-        'influencer.guest' => \App\Http\Middleware\RedirectIfInfluencer::class,
-
-        // Mcamara Localization Middleware
+        // 🌐 Mcamara Localization
         'localize' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,
         'localizationRedirectFilter' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
         'localeSessionRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
         'localeCookieRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
+
+        // 🧩 Locale check
         'checkSupportedLocale' => \App\Http\Middleware\CheckSupportedLocale::class,
     ];
 }

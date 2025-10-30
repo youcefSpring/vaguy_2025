@@ -19,3 +19,4 @@ code/.vscode
 # Archives and large files
 public_files.zip
 
+/old-react
