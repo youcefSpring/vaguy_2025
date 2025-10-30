@@ -334,6 +334,7 @@
     </style>
 
     @stack('styles')
+    @stack('style')
 </head>
 
 <body class="h-full">
@@ -376,7 +377,7 @@
     <div class="min-h-full">
         @include('partials.shared.navigation')
 
-        <div class="lg:pl-72">
+        <div class="lg:ltr:pl-72 lg:rtl:pr-72">
             <!-- Page header with mobile menu button -->
             <div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
                 <button type="button" class="-m-2.5 p-2.5 text-gray-700 dark:text-gray-300 lg:hidden" id="mobile-menu-button">
@@ -401,7 +402,7 @@
                         </button>
 
                         <!-- Language Switcher -->
-                        @if($language->count())
+                        @if(is_object($language) && method_exists($language, 'count') && $language->count())
                             <div class="relative" x-data="{ open: false }" @click.away="open = false">
                                 <button @click="open = !open"
                                         class="inline-flex items-center justify-center px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200"
@@ -736,5 +737,6 @@
     </script>
 
     @stack('scripts')
+    @stack('script')
 </body>
 </html>

@@ -355,7 +355,7 @@ public function submitForm(Request $request)
 
 
 }
-    public function edit($id)
+    public function edit($locale, $id)
     {
         $campain= Campaingn::find($id);
         $categories = Category::all();
@@ -369,7 +369,7 @@ public function submitForm(Request $request)
     /**
      * Store method for resource controller (alias for submitForm)
      */
-    public function store(Request $request)
+    public function store(Request $request, $locale = null)
     {
         return $this->submitForm($request);
     }
@@ -377,7 +377,7 @@ public function submitForm(Request $request)
     /**
      * Update method for resource controller
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $locale, $id)
     {
         $request->merge(['campain_id' => $id]);
         return $this->submitForm($request);
@@ -386,15 +386,15 @@ public function submitForm(Request $request)
     /**
      * Show method for resource controller (alias for show_detail)
      */
-    public function show($id)
+    public function show($locale, $id)
     {
-        return $this->show_detail($id);
+        return $this->show_detail($locale, $id);
     }
 
     /**
      * Create method for resource controller (alias for add_campaign)
      */
-    public function create(Request $request)
+    public function create($locale, Request $request)
     {
         return $this->add_campaign($request);
     }
@@ -402,9 +402,9 @@ public function submitForm(Request $request)
     /**
      * Destroy method for resource controller (alias for delete_campain)
      */
-    public function destroy($id)
+    public function destroy($locale, $id)
     {
-        return $this->delete_campain($id);
+        return $this->delete_campain($locale, $id);
     }
 
     /**

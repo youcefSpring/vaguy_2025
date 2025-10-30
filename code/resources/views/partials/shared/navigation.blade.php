@@ -13,9 +13,9 @@
 @endphp
 
 <!-- Static sidebar for desktop -->
-<div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+<div class="hidden lg:fixed lg:inset-y-0 ltr:lg:left-0 rtl:lg:right-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
     <!-- Sidebar component -->
-    <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-6 pb-4" style="scroll-behavior: smooth;">
+    <div class="flex grow flex-col gap-y-5 overflow-y-auto ltr:border-r rtl:border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-6 pb-4" style="scroll-behavior: smooth;">
         <div class="flex h-16 shrink-0 items-center">
             <img class="h-8 w-auto" src="{{ getImage(getFilePath('logoIcon') . '/logo.png') }}" alt="{{ $general->site_name }}">
         </div>
@@ -246,8 +246,8 @@
     <div class="fixed inset-0 z-50" id="mobile-overlay" style="display: none;">
         <div class="fixed inset-0 bg-gray-900/80 dark:bg-black/90" aria-hidden="true" id="mobile-overlay-bg"></div>
         <div class="fixed inset-0 flex">
-            <div class="relative mr-16 flex w-full max-w-xs flex-1">
-                <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
+            <div class="relative ltr:mr-16 rtl:ml-16 flex w-full max-w-xs flex-1">
+                <div class="absolute ltr:left-full rtl:right-full top-0 flex w-16 justify-center pt-5">
                     <button type="button" class="-m-2.5 p-2.5" id="close-sidebar">
                         <span class="sr-only">Close sidebar</span>
                         <i data-lucide="x" class="h-6 w-6 text-white"></i>

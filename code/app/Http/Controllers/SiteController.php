@@ -200,9 +200,9 @@ class SiteController extends Controller {
         return to_route($view, [$ticket->ticket])->withNotify($notify);
     }
 
-    public function policyPages($slug, $id) {
-        $policy    = Frontend::where('id', $id)->where('data_keys', 'policy_pages.element')->firstOrFail();
-        // return $policy;
+    public function policyPages($locale, $slug, $id) {
+        // Note: $locale is automatically injected by the route prefix
+        $policy = Frontend::where('id', $id)->where('data_keys', 'policy_pages.element')->firstOrFail();
         $pageTitle = $policy->data_values->title;
         return view($this->activeTemplate . 'policy', compact('policy', 'pageTitle'));
     }

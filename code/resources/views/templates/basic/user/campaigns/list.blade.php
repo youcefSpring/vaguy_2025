@@ -24,22 +24,13 @@ const CampaignManager = {
                         <h3 class="text-lg font-semibold text-gray-900" v-text="texts.manageTitle"></h3>
                         <p class="text-sm text-gray-600" v-text="texts.manageSubtitle"></p>
                     </div>
-                    <button @click="showWizard = true"
-                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
-                        <i data-lucide="plus" class="h-4 w-4 ml-2"></i>
+                    <a :href="createCampaignUrl"
+                       class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                        <svg class="h-4 w-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
                         <span v-text="texts.createNew"></span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Campaign Wizard Modal -->
-            <div v-if="showWizard" class="fixed inset-0 z-50 overflow-y-auto">
-                <div class="flex items-start justify-center min-h-screen pt-8 px-4 pb-8">
-                    <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" @click="showWizard = false"></div>
-
-                    <div class="relative bg-white rounded-lg shadow-xl transform transition-all w-full max-w-4xl mx-auto">
-                        <campaign-wizard @close="showWizard = false" @campaign-created="onCampaignCreated"></campaign-wizard>
-                    </div>
+                    </a>
                 </div>
             </div>
 
@@ -51,14 +42,18 @@ const CampaignManager = {
                 </div>
 
                 <div v-else-if="campaigns.length === 0" class="text-center py-16">
-                    <i data-lucide="megaphone" class="h-16 w-16 text-gray-400 mx-auto mb-4"></i>
+                    <svg class="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+                    </svg>
                     <h3 class="text-xl font-medium text-gray-900 mb-2" v-text="texts.noCampaigns"></h3>
                     <p class="text-gray-600 mb-8 max-w-md mx-auto" v-text="texts.noCampaignsDesc"></p>
-                    <button @click="showWizard = true"
-                            class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200">
-                        <i data-lucide="plus" class="h-5 w-5 ml-2"></i>
+                    <a :href="createCampaignUrl"
+                       class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200">
+                        <svg class="h-5 w-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
                         <span v-text="texts.createNew"></span>
-                    </button>
+                    </a>
                 </div>
 
                 <div v-else class="p-6">
@@ -114,7 +109,8 @@ const CampaignManager = {
         const campaignsData = @json($campains ?? []);
         const campaigns = ref(Array.isArray(campaignsData) ? campaignsData.filter(c => c !== null) : []);
         const loading = ref(false);
-        const showWizard = ref(false);
+        const locale = @json(app()->getLocale());
+        const createCampaignUrl = '/' + locale + '/client/add-campaign';
 
         const texts = {
             manageTitle: @json(__('إدارة الحملات')),
@@ -136,7 +132,7 @@ const CampaignManager = {
         const loadCampaigns = async () => {
             loading.value = true;
             try {
-                const response = await axios.get('/client/campaigns-data');
+                const response = await axios.get('/' + locale + '/client/campaigns-data');
                 const data = response.data;
                 campaigns.value = Array.isArray(data) ? data.filter(c => c !== null && c !== undefined) : [];
             } catch (error) {
@@ -147,16 +143,9 @@ const CampaignManager = {
             }
         };
 
-        const onCampaignCreated = (newCampaign) => {
-            if (newCampaign && newCampaign.id) {
-                campaigns.value.push(newCampaign);
-            }
-            showWizard.value = false;
-        };
-
         const viewCampaign = (campaign) => {
             if (campaign && campaign.id) {
-                window.location.href = `/client/campaigns/${campaign.id}`;
+                window.location.href = '/' + locale + '/client/show-detail/' + campaign.id;
             } else {
                 console.warn('Campaign ID not found');
             }
@@ -164,7 +153,7 @@ const CampaignManager = {
 
         const editCampaign = (campaign) => {
             if (campaign && campaign.id) {
-                window.location.href = `/client/campaigns/${campaign.id}/edit`;
+                window.location.href = '/' + locale + '/client/edit-campaign/' + campaign.id;
             } else {
                 console.warn('Campaign ID not found');
             }
@@ -175,67 +164,31 @@ const CampaignManager = {
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
+
+            console.log('CampaignManager mounted', {
+                campaigns: campaigns.value,
+                locale: locale
+            });
         });
 
         return {
             campaigns,
             loading,
-            showWizard,
+            locale,
+            createCampaignUrl,
             texts,
             formatDate,
             loadCampaigns,
-            onCampaignCreated,
             viewCampaign,
             editCampaign
         };
     }
 };
 
-// Campaign Wizard Component (simplified for modal use)
-const CampaignWizard = {
-    props: {
-        preselectedInfluencer: {
-            type: Object,
-            default: null
-        },
-        csrfToken: {
-            type: String,
-            default: () => document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-        }
-    },
-    emits: ['close', 'campaign-created'],
-    template: `
-        <div class="bg-white">
-            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                <h3 class="text-lg font-medium text-gray-900">إنشاء حملة جديدة</h3>
-                <button @click="$emit('close')" class="text-gray-400 hover:text-gray-600">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <p class="text-center text-gray-500 py-8">
-                    لإنشاء حملة جديدة، يرجى استخدام النموذج المفصل.
-                </p>
-                <div class="text-center">
-                    <a href="/client/add-campaign"
-                       class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700">
-                        <i data-lucide="plus" class="h-5 w-5 ml-2"></i>
-                        إنشاء حملة جديدة
-                    </a>
-                </div>
-            </div>
-        </div>
-    `,
-    setup(props, { emit }) {
-        return {};
-    }
-};
-
 // Mount the app
 createApp({
     components: {
-        CampaignManager,
-        CampaignWizard
+        CampaignManager
     }
 }).mount('#campaign-app');
 </script>

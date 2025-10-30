@@ -35,10 +35,10 @@ class Kernel extends HttpKernel
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
 
-            // 🌐 Mcamara Localization middleware
+            // 🌐 Mcamara Localization middleware (must be after StartSession)
             \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
             \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
-            \Mcamara\LaravelLocalization\Middleware\LocaleViewPath::class,
+            \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class,
 
             // Laravel session & CSRF
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,

@@ -105,29 +105,6 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::get('maintenance-mode','App\Http\Controllers\SiteController@maintenance')->name('maintenance');
 
-        // Catch-all for unsupported locales - redirect to default locale
-        Route::get('/{unsupported_locale}/{path?}', function($unsupportedLocale, $path = null) {
-            $supportedLocales = array_keys(config('laravellocalization.supportedLocales'));
-
-            // Check if this is an unsupported 2-letter locale code
-            if (strlen($unsupportedLocale) === 2 && !in_array($unsupportedLocale, $supportedLocales)) {
-                $defaultLocale = config('app.locale', 'en');
-                $newUrl = '/' . $defaultLocale . ($path ? '/' . $path : '');
-
-                // Preserve query string
-                $query = request()->getQueryString();
-                if ($query) {
-                    $newUrl .= '?' . $query;
-                }
-
-                return redirect($newUrl, 301);
-            }
-
-            // If not an unsupported locale, return 404
-            abort(404);
-        })->where('unsupported_locale', '[a-z]{2}')
-          ->where('path', '.*');
-
         // DEBUG ROUTES (without locale prefix for easier testing)
         Route::prefix('debug')->group(function() {
             Route::get('test1', function() {
@@ -180,6 +157,37 @@ class RouteServiceProvider extends ServiceProvider
 
                 return $output;
             });
+        });
+
+        // Catch-all for unsupported locales (must be LAST route)
+        // This only triggers if no other routes match
+        Route::fallback(function() {
+            $firstSegment = request()->segment(1);
+            $supportedLocales = array_keys(config('laravellocalization.supportedLocales'));
+
+            // Check if first segment looks like an unsupported locale (2 letters)
+            if ($firstSegment && strlen($firstSegment) === 2 && ctype_alpha($firstSegment) && !in_array($firstSegment, $supportedLocales)) {
+                $defaultLocale = config('app.locale', 'en');
+
+                // Get the path after the locale
+                $segments = request()->segments();
+                array_shift($segments); // Remove the unsupported locale
+                $path = implode('/', $segments);
+
+                // Build new URL with default locale
+                $newUrl = '/' . $defaultLocale . ($path ? '/' . $path : '');
+
+                // Preserve query string
+                $query = request()->getQueryString();
+                if ($query) {
+                    $newUrl .= '?' . $query;
+                }
+
+                return redirect($newUrl, 301);
+            }
+
+            // Otherwise, return standard 404
+            abort(404);
         });
     }
 
