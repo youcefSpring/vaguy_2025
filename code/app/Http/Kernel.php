@@ -37,6 +37,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckSupportedLocale::class, // Check for unsupported locales first
             \App\Http\Middleware\LanguageMiddleware::class,
             \App\Http\Middleware\LastUserActivity::class,
             \App\Http\Middleware\LastInfluencerActivity::class,
@@ -89,5 +90,6 @@ class Kernel extends HttpKernel
         'localizationRedirectFilter' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
         'localeSessionRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
         'localeCookieRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
+        'checkSupportedLocale' => \App\Http\Middleware\CheckSupportedLocale::class,
     ];
 }

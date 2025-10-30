@@ -91,6 +91,11 @@ class RouteServiceProvider extends ServiceProvider
                 }
             });
 
+            // Locale redirect test routes (temporary - can be removed after testing)
+            if (file_exists(base_path('routes/test-locale-redirect.php'))) {
+                require base_path('routes/test-locale-redirect.php');
+            }
+
         });
 
         // Root redirect to localized URL
@@ -99,6 +104,29 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::get('maintenance-mode','App\Http\Controllers\SiteController@maintenance')->name('maintenance');
+
+        // Catch-all for unsupported locales - redirect to default locale
+        Route::get('/{unsupported_locale}/{path?}', function($unsupportedLocale, $path = null) {
+            $supportedLocales = array_keys(config('laravellocalization.supportedLocales'));
+
+            // Check if this is an unsupported 2-letter locale code
+            if (strlen($unsupportedLocale) === 2 && !in_array($unsupportedLocale, $supportedLocales)) {
+                $defaultLocale = config('app.locale', 'en');
+                $newUrl = '/' . $defaultLocale . ($path ? '/' . $path : '');
+
+                // Preserve query string
+                $query = request()->getQueryString();
+                if ($query) {
+                    $newUrl .= '?' . $query;
+                }
+
+                return redirect($newUrl, 301);
+            }
+
+            // If not an unsupported locale, return 404
+            abort(404);
+        })->where('unsupported_locale', '[a-z]{2}')
+          ->where('path', '.*');
 
         // DEBUG ROUTES (without locale prefix for easier testing)
         Route::prefix('debug')->group(function() {
