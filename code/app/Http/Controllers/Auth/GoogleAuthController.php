@@ -16,13 +16,51 @@ class GoogleAuthController extends Controller
     {
         session(['auth_type' => $type]);
         session(['auth_locale' => LaravelLocalization::getCurrentLocale()]);
-        return Socialite::driver('google')->redirect();
+
+        try {
+            // Build non-localized callback URL
+            $callbackUrl = config('app.url') . '/auth/google/callback';
+
+            // Explicitly build the redirect with full configuration
+            $driver = Socialite::buildProvider(
+                \Laravel\Socialite\Two\GoogleProvider::class,
+                [
+                    'client_id' => config('services.google.client_id'),
+                    'client_secret' => config('services.google.client_secret'),
+                    'redirect' => $callbackUrl,
+                ]
+            );
+
+            return $driver->redirect();
+        } catch (\Exception $e) {
+            \Log::error('Google OAuth Redirect Error', [
+                'message' => $e->getMessage(),
+                'client_id' => config('services.google.client_id'),
+                'redirect_url' => url('/auth/google/callback')
+            ]);
+
+            $notify[] = ['error', 'Google OAuth configuration error: ' . $e->getMessage()];
+            return redirect()->back()->withNotify($notify);
+        }
     }
 
     public function callback()
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            // Build non-localized callback URL (must match redirect)
+            $callbackUrl = config('app.url') . '/auth/google/callback';
+
+            // Explicitly build the provider with configuration
+            $driver = Socialite::buildProvider(
+                \Laravel\Socialite\Two\GoogleProvider::class,
+                [
+                    'client_id' => config('services.google.client_id'),
+                    'client_secret' => config('services.google.client_secret'),
+                    'redirect' => $callbackUrl,
+                ]
+            );
+
+            $googleUser = $driver->user();
             $authType = session('auth_type', 'user');
             $locale = session('auth_locale', config('app.locale'));
 
@@ -59,7 +97,7 @@ class GoogleAuthController extends Controller
                 'google_id' => $googleUser->id,
                 'ev' => 1, // Email verified
                 'sv' => 1, // SMS verified (if applicable)
-                'reg_step' => 1, // Mark registration as complete to skip profile completion page
+                'reg_step' => 0, // Set to 0 to require profile completion
                 'password' => bcrypt(Str::random(16)),
                 'country_code' => 'US',
                 'mobile' => '',
@@ -75,9 +113,16 @@ class GoogleAuthController extends Controller
 
             $notify[] = ['success', __('auth.account_created_via_google')];
 
-            // Redirect to dashboard or profile completion
-            $dashboardUrl = LaravelLocalization::getLocalizedURL($locale, '/' . ($authType === 'influencer' ? 'influencer' : 'client') . '/dashboard');
-            return redirect()->to($dashboardUrl)->withNotify($notify);
+            // Redirect to profile completion page for new users
+            if ($authType === 'influencer') {
+                // For influencers, redirect to their profile completion
+                $profileUrl = LaravelLocalization::getLocalizedURL($locale, '/influencer/profile-setting');
+                return redirect()->to($profileUrl)->withNotify($notify);
+            } else {
+                // For users/clients, redirect to user data completion page
+                $profileUrl = LaravelLocalization::getLocalizedURL($locale, '/client/user-data');
+                return redirect()->to($profileUrl)->withNotify($notify);
+            }
 
         } catch (\Exception $e) {
             $notify[] = ['error', __('auth.google_auth_failed') . ': ' . $e->getMessage()];

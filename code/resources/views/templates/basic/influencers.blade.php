@@ -577,15 +577,30 @@
             // Pagination
             $(document).on('click', '.pagination-link', function (event) {
                 event.preventDefault();
-                page = $(this).attr('href').split('page=')[1];
-                fetchInfluencer();
+                const href = $(this).attr('href');
+                console.log('Pagination link clicked:', href);
+
+                if (href && href.includes('page=')) {
+                    page = href.split('page=')[1];
+                    console.log('Page number:', page);
+                    fetchInfluencer();
+                } else {
+                    console.error('Invalid pagination link:', href);
+                }
             });
 
         })(jQuery);
 
         // Global function for fetching influencers
         function fetchInfluencer() {
+            console.log('fetchInfluencer called');
             $('.loader-wrapper').removeClass('hidden');
+
+            // Fallback timeout to hide loader after 10 seconds
+            const loaderTimeout = setTimeout(function() {
+                console.warn('Request timeout - hiding loader');
+                $('.loader-wrapper').addClass('hidden');
+            }, 10000);
 
             let data = {};
 
@@ -655,6 +670,7 @@
             let url = `{{ localized_route('influencer.filter') }}`;
 
             console.log('Fetching influencers with data:', data);
+            console.log('Request URL:', url);
 
             // Use jQuery AJAX
             $.ajax({
@@ -665,8 +681,12 @@
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 },
+                beforeSend: function() {
+                    console.log('AJAX request starting...');
+                },
                 success: function(html) {
-                    console.log('HTML received, length:', html.length);
+                    console.log('SUCCESS - HTML received, length:', html.length);
+                    console.log('First 200 chars:', html.substring(0, 200));
                     $('#influencers').html(html);
 
                     // Re-initialize Lucide icons
@@ -674,7 +694,10 @@
                         lucide.createIcons();
                     }
 
-                    $('.loader-wrapper').addClass('hidden');
+                    // Scroll to top of results smoothly
+                    $('html, body').animate({
+                        scrollTop: $('#influencers').offset().top - 100
+                    }, 500);
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching influencers:', {
@@ -684,8 +707,6 @@
                         response: xhr.responseText
                     });
 
-                    $('.loader-wrapper').addClass('hidden');
-
                     let errorMessage = 'Error loading influencers. Please try again.';
                     if (xhr.status === 500) {
                         errorMessage = 'Server error. Please contact support if this persists.';
@@ -694,6 +715,14 @@
                     }
 
                     alert(errorMessage + '\n\nStatus: ' + xhr.status);
+                },
+                complete: function() {
+                    // Clear the timeout since request completed
+                    clearTimeout(loaderTimeout);
+
+                    // Always hide loader, regardless of success or error
+                    $('.loader-wrapper').addClass('hidden');
+                    console.log('AJAX request completed');
                 }
             });
         }

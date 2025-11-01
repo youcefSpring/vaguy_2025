@@ -64,7 +64,7 @@ class SiteController extends Controller {
 
     public function index() {
         //   return CampainInfluencerOffer::get();
-        // return redirect()->route('user.login');
+        return redirect(url(localized_route('user.login')));
         $pageTitle = 'Home';
         $sections  = Page::where('tempname', $this->activeTemplate)->where('slug', '/')->first();
         $tags      = Tag::withCount('serviceTag')->orderBy('service_tag_count', 'desc')->take(6)->get();
@@ -709,6 +709,15 @@ class SiteController extends Controller {
 
     public function filterInfluencer(Request $request) {
         try {
+            // Disable debugbar for AJAX requests to prevent fetch errors
+            try {
+                if (app()->bound('debugbar')) {
+                    app('debugbar')->disable();
+                }
+            } catch (\Exception $e) {
+                // Ignore if debugbar not available
+            }
+
             $influencers = $this->getInfluencer($request);
 
             // Only fetch favorites if user is authenticated
