@@ -44,7 +44,38 @@
                 </nav>
             </div>
 
+            <!-- Tab Content -->
+            <div class="mt-6">
+                <!-- Basic Information Tab -->
+                <div id="info-tab" class="tab-pane active">
+                    @include('templates.basic.influencer.profile.partials.basic-info')
+                </div>
 
+                <!-- Statistics Tab -->
+                <div id="stats-tab" class="tab-pane hidden">
+                    @include('templates.basic.influencer.profile.partials.statistics')
+                </div>
+
+                <!-- Social Media Tab -->
+                <div id="social-tab" class="tab-pane hidden">
+                    @include('templates.basic.influencer.profile.partials.social-media')
+                </div>
+
+                <!-- Education Tab -->
+                <div id="education-tab" class="tab-pane hidden">
+                    @include('templates.basic.influencer.profile.partials.education')
+                </div>
+
+                <!-- Skills Tab -->
+                <div id="skills-tab" class="tab-pane hidden">
+                    @include('templates.basic.influencer.profile.partials.skills')
+                </div>
+
+                <!-- Password Tab -->
+                <div id="password-tab" class="tab-pane hidden">
+                    @include('templates.basic.influencer.profile.partials.password')
+                </div>
+            </div>
         </div>
 
         @push('script')
