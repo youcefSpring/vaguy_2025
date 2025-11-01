@@ -16,7 +16,7 @@ code/.fleet
 code/.idea
 code/.vscode
 
-# Archives and large files
+# Archives and tlarge files
 public_files.zip
 
 /old-react
