@@ -12,6 +12,34 @@
     <div class="navbar__right">
         <ul class="navbar__action-list">
 
+            {{-- Language Switcher --}}
+            <li class="dropdown">
+                <button type="button" class="primary--layer" data-bs-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="las la-language text--primary"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu--sm p-0 border-0 box--shadow1 dropdown-menu-right">
+                    @php
+                        $currentLocale = app()->getLocale();
+                        $languages = [
+                            'en' => ['name' => 'English', 'flag' => '🇬🇧'],
+                            'fr' => ['name' => 'Français', 'flag' => '🇫🇷'],
+                            'ar' => ['name' => 'العربية', 'flag' => '🇩🇿']
+                        ];
+                    @endphp
+                    @foreach($languages as $code => $lang)
+                        <a href="{{ route('lang', $code) }}"
+                           class="dropdown-menu__item d-flex align-items-center px-3 py-2 {{ $currentLocale == $code ? 'active bg--primary text-white' : '' }}">
+                            <span class="me-2">{{ $lang['flag'] }}</span>
+                            <span class="dropdown-menu__caption">{{ $lang['name'] }}</span>
+                            @if($currentLocale == $code)
+                                <i class="las la-check ms-auto"></i>
+                            @endif
+                        </a>
+                    @endforeach
+                </div>
+            </li>
+
             <li class="dropdown">
                 <button type="button" class="primary--layer" data-bs-toggle="dropdown" data-display="static"
                     aria-haspopup="true" aria-expanded="false">
